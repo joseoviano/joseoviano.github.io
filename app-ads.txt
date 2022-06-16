@@ -173,3 +173,5 @@ pubmatic.com, 160113, RESELLER, 5d62403b186f2ace
 pubmatic.com, 160974, RESELLER, 5d62403b186f2ace
 
 pubmatic.com, 161136, RESELLER, 5d62403b186f2ace
+
+algorix.co, 60016 , RESELLER
