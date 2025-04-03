@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial: Crear un Reproductor de Música en Unity</title>
+    <style>
+        /* CSS Básico para el Tutorial */
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        header {
+            background-color: #353a40; /* Dark Unity-like color */
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+
+         header h1 {
+            margin: 0;
+            font-size: 2em;
+         }
+
+        nav {
+            background-color: #e9e9e9;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 5px 10px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #337ab7;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            background-color: #ddd;
+            color: #23527c;
+        }
+
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            display: none; /* Oculto por defecto */
+        }
+
+        section.active {
+            display: block; /* Mostrar sección activa */
+        }
+
+        h2 {
+            color: #337ab7;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 25px; /* More space for subheadings */
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ccc; /* Separator for script steps */
+            padding-bottom: 3px;
+        }
+
+        code {
+            background-color: #eee;
+            border: 1px solid #ddd;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: monospace;
+            color: #c7254e; /* Bootstrap-like code color */
+        }
+
+        pre {
+            background-color: #2d2d2d; /* Dark background for code blocks */
+            color: #ccc; /* Light text */
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.9em;
+            margin-top: 5px; /* Space before code block */
+            margin-bottom: 15px; /* Space after code block */
+        }
+
+        .code-comment {
+           color: #5cb85c; /* Green comments */
+        }
+
+        .code-keyword {
+            color: #569cd6; /* Blue keywords */
+        }
+        .code-type {
+             color: #4ec9b0; /* Teal types */
+        }
+        .code-string {
+            color: #d69d85; /* Orange strings */
+        }
+        .code-literal {
+            color: #b5cea8; /* Light green literals/numbers */
+        }
+
+        img.inspector, img.hierarchy, img.preview {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        .important {
+            background-color: #ffecb3;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        ul, ol {
+             margin-left: 20px;
+             padding-left: 10px; /* Add some padding */
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Estilos para la previsualización */
+        .preview-container {
+            background-color: #000; /* Fondo negro como en la imagen */
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .preview-container img {
+            border: none;
+            max-width: 80%; /* Ajustar tamaño si es necesario */
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Tutorial: Reproductor de Música en Unity</h1>
+        </header>
+
+        <nav id="tutorial-nav">
+            <ul>
+                <li><a href="#intro" class="active">1. Intro</a></li>
+                <li><a href="#setup">2. Setup</a></li>
+                <li><a href="#ui-base">3. UI Base</a></li>
+                <li><a href="#ui-textos">4. Textos</a></li>
+                <li><a href="#ui-slider-progreso">5. Slider Progreso</a></li>
+                <li><a href="#ui-botones">6. Botones</a></li>
+                <li><a href="#ui-sliders-ctrl">7. Sliders Control</a></li>
+                <li><a href="#ui-toggle">8. Toggle</a></li>
+                <li><a href="#script">9. Script (Paso a Paso)</a></li>
+                <li><a href="#conexion">10. Conexión UI-Script</a></li>
+                <li><a href="#audio">11. Audio</a></li>
+                <li><a href="#final">12. Final</a></li>
+            </ul>
+        </nav>
+
+        <section id="intro" class="active">
+            <h2>1. Introducción y Objetivo</h2>
+            <p>¡Bienvenido/a a este tutorial! Aprenderás a crear un reproductor de música funcional en Unity desde cero. Esta práctica está diseñada para estudiantes que están empezando con Unity y quieren familiarizarse con:</p>
+            <ul>
+                <li>El sistema de UI de Unity (Canvas, TextMeshPro, Buttons, Sliders, Toggles).</li>
+                <li>La gestión básica de Audio (AudioSource, AudioClip).</li>
+                <li>La creación y conexión de scripts C# para controlar la lógica de la aplicación.</li>
+            </ul>
+            <p>Al final de este tutorial, tendrás un reproductor como el que se muestra a continuación:</p>
+            <div class="preview-container">
+                 <img src="images/ui_preview.png" alt="Vista previa del Reproductor de Música" class="preview">
+            </div>
+            <p class="important"><strong>Nota:</strong> Este tutorial asume que tienes los assets necesarios (imágenes para los botones/fondos, archivos de audio .mp3, .wav u .ogg, y la fuente pixelada si deseas replicar el estilo exacto). Si no los tienes, puedes usar los elementos de UI estándar de Unity y cualquier archivo de audio.</p>
+        </section>
+
+        <section id="setup">
+            <h2>2. Configuración Inicial del Proyecto</h2>
+            <ol>
+                <li>Crea un nuevo proyecto 2D en Unity Hub. Puedes llamarlo "MusicPlayerTutorial".</li>
+                <li>
+                    Importa los assets necesarios a tu proyecto:
+                    <ul>
+                        <li>Crea carpetas en la ventana `Project` (por ejemplo: `Audio`, `Sprites`, `Scripts`, `Fonts`).</li>
+                        <li>Arrastra tus archivos de audio a la carpeta `Audio`.</li>
+                        <li>Arrastra tus imágenes (botones, fondos, etc.) a la carpeta `Sprites`.</li>
+                        <li>(Opcional) Arrastra tu fuente a la carpeta `Fonts`.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Importante: TextMeshPro.</strong> Si es la primera vez que usas UI en este proyecto, Unity te pedirá importar los "TMP Essentials". Haz clic en "Import TMP Essentials". Si no aparece, puedes ir a `Window` > `TextMeshPro` > `Import TMP Essential Resources`.
+                </li>
+                <li>
+                    En la jerarquía (`Hierarchy`), crea un GameObject vacío y llámalo <code>MusicPlayerController</code>. Este objeto contendrá nuestro script principal más adelante.
+                </li>
+                <li>
+                    Asegúrate de que tienes un <code>EventSystem</code> en tu escena. Si no lo tienes, créalo haciendo clic derecho en la jerarquía -> `UI` -> `Event System`. Es esencial para que la UI funcione.
+                </li>
+            </ol>
+            <p>Tu jerarquía inicial debería tener al menos `Main Camera`, `MusicPlayerController` y `EventSystem`.</p>
+        </section>
+
+        <section id="ui-base">
+            <h2>3. Creando la Base de la Interfaz (UI)</h2>
+            <ol>
+                <li>
+                    <strong>Crear el Canvas:</strong> Haz clic derecho en la Jerarquía -> `UI` -> `Canvas`. Renómbralo a <code>Canvas</code>.
+                    <ul>
+                        <li>Selecciona el <code>Canvas</code>. En el Inspector, busca el componente `Canvas Scaler`.</li>
+                        <li>Cambia `UI Scale Mode` a `Scale With Screen Size`.</li>
+                        <li>Establece una `Reference Resolution` (por ejemplo, 1920x1080 o una resolución que se ajuste a tu diseño).</li>
+                        <li>Ajusta `Match` según prefieras (0 = Width, 1 = Height, 0.5 = mezcla).</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>(Opcional) Añadir un Fondo:</strong> Si tienes una imagen de fondo para el reproductor, haz clic derecho en `Canvas` -> `UI` -> `Image`. Renómbrala a `BackgroundImage`, ajústala para que cubra el área deseada y asígnale tu sprite de fondo en el campo `Source Image` del componente `Image`. Asegúrate de que esté detrás de otros elementos reordenándola en la jerarquía (arrastrarla hacia arriba).
+                </li>
+                 <li>
+                    <strong>Panel para Botones:</strong> Para organizar los botones de control (Play, Pause, etc.), crea un panel. Haz clic derecho en `Canvas` -> `UI` -> `Panel`. Renómbralo a <code>PanelButtons</code>.
+                    <ul>
+                        <li>Puedes quitarle el componente `Image` si no quieres que tenga fondo visible, o ajustar su color y transparencia.</li>
+                        <li>Posiciona y dimensiona este panel donde irán los botones centrales. Puedes usar `Layout Groups` (como `Horizontal Layout Group` o `Grid Layout Group`) dentro del panel para organizar los botones automáticamente si lo deseas.</li>
+                    </ul>
+                </li>
+            </ol>
+             <p>Tu jerarquía ahora debería parecerse un poco a esto (sin todos los elementos aún):</p>
+             <!-- Asumiendo que tienes una imagen llamada hierarchy_base.png -->
+             <img src="images/hierarchy_base.png" alt="Jerarquía con Canvas y Panel" class="hierarchy">
+             <p class="important">Recuerda que las imágenes (`inspector_*.png`, `hierarchy_*.png`, `ui_preview.png`) deben estar en una carpeta llamada `images` al mismo nivel que este archivo HTML para que se muestren.</p>
+        </section>
+
+        <section id="ui-textos">
+            <h2>4. Añadiendo Elementos de Texto (TextMeshPro)</h2>
+            <p>Usaremos TextMeshPro para un mejor control visual del texto. Si no importaste los "TMP Essentials" antes, hazlo ahora (`Window` > `TextMeshPro` > `Import TMP Essential Resources`).</p>
+            <ol>
+                <li>
+                    <strong>Título Multimedia:</strong> Haz clic derecho en `Canvas` -> `UI` -> `Text - TextMeshPro`. Renómbralo a <code>TextTitleMultimedia</code>.
+                    <ul>
+                        <li>En el Inspector, escribe el título (ej: "MUSIC PLAYER").</li>
+                        <li>Ajusta su posición, tamaño, fuente (si importaste una), tamaño de fuente, color y alineación.</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Texto Canción Actual:</strong> Crea otro `Text - TextMeshPro` (hijo de `Canvas`). Renómbralo a <code>TextActualSong</code>.
+                    <ul>
+                        <li>Posiciónalo debajo del título. Este texto mostrará el nombre de la canción (ej: "Playing: Song 1"). Lo actualizaremos por script.</li>
+                        <li>Ajusta su estilo como el título.</li>
+                    </ul>
+                </li>
+                 <li>
+                    <strong>Porcentaje Progreso:</strong> Crea otro `Text - TextMeshPro` (hijo de `Canvas`). Renómbralo a <code>TextProgressPercent</code>.
+                    <ul>
+                        <li>Posiciónalo cerca del slider de progreso (que crearemos luego), normalmente al inicio o al final. Mostrará el tiempo (ej: "0:34 / 3:15").</li>
+                        <li>Ajusta su estilo.</li>
+                    </ul>
+                </li>
+                 <li>
+                    <strong>Etiquetas Volumen y Pitch:</strong> Crea dos `Text - TextMeshPro` más (hijos de `Canvas`). Renómbralos a <code>TextVolume</code> y <code>TextPitch</code>.
+                    <ul>
+                        <li>Escribe "VOLUME" y "PITCH" respectivamente.</li>
+                        <li>Posiciónalos encima o cerca de sus respectivos sliders (que crearemos más adelante).</li>
+                        <li>Ajusta su estilo.</li>
+                    </ul>
+                </li>
+            </ol>
+            <p>Organiza estos elementos en el `Canvas` para que coincidan con el diseño de la imagen de previsualización.</p>
+             <img src="images/ui_preview.png" alt="Vista previa con textos" class="preview">
+        </section>
+
+        <section id="ui-slider-progreso">
+             <h2>5. Creando el Slider de Progreso</h2>
+             <ol>
+                <li>
+                    Haz clic derecho en `Canvas` -> `UI` -> `Slider`. Renómbralo a <code>SliderProgress</code>.
+                </li>
+                <li>
+                    Posiciona y dimensiona el slider debajo de `TextActualSong`.
+                </li>
+                <li>
+                    <strong>Configuración del Slider:</strong> Selecciona `SliderProgress`. En el Inspector, busca el componente `Slider`.
+                    <ul>
+                        <li>Marca `Interactable` si quieres que el usuario pueda pinchar y arrastrar para buscar en la canción.</li>
+                        <li>Asegúrate de que `Direction` sea `Left To Right`.</li>
+                        <li>`Min Value` debe ser 0.</li>
+                        <li>`Max Value` debe ser 1. Esto facilita el cálculo del progreso como un porcentaje (0 a 1).</li>
+                        <li>`Value` inicial debe ser 0.</li>
+                        <li>Puedes desmarcar `Whole Numbers`.</li>
+                    </ul>
+                 </li>
+                 <li>
+                    <strong>Apariencia (Opcional pero recomendado):</strong>
+                    <ul>
+                        <li>Expande `SliderProgress` en la jerarquía. Verás `Background`, `Fill Area`, y `Handle Slide Area`.</li>
+                        <li>Selecciona `Background` y `Fill Area` -> `Fill`. Asígnales los sprites o colores deseados en sus componentes `Image`. El `Fill` es la parte que se llena.</li>
+                        <li>Selecciona `Handle Slide Area` -> `Handle`. Asígnale el sprite o color deseado para el control deslizante. Puedes ajustar su tamaño. Si no quieres un handle visible, puedes desactivar el GameObject `Handle` o hacer su imagen transparente.</li>
+                    </ul>
+                 </li>
+                 <li>
+                     <strong>Eventos (Importante):</strong> En la sección 10 ("Conexión UI-Script"), conectaremos los eventos `On Value Changed`, `Begin Drag`, `Drag`, y `End Drag` para que el slider funcione correctamente con nuestro script.
+                 </li>
+             </ol>
+             <img src="images/inspector_slider_progress.png" alt="Inspector del Slider de Progreso" class="inspector">
+        </section>
+
+        <section id="ui-botones">
+             <h2>6. Creando los Botones de Control</h2>
+             <p>Crearemos los botones dentro del <code>PanelButtons</code> que hicimos antes.</p>
+             <ol>
+                 <li>
+                    <strong>Botón Play:</strong>
+                    <ul>
+                        <li>Haz clic derecho en `PanelButtons` -> `UI` -> `Button - TextMeshPro`. Renómbralo a <code>ButtonPlay</code>.</li>
+                        <li>Selecciona `ButtonPlay`. En el Inspector, busca el componente `Image` y asígnale el sprite deseado.</li>
+                        <li>Expande `ButtonPlay`, selecciona el objeto `Text (TMP)` hijo y cambia su texto a "PLAY". Ajusta estilo.</li>
+                        <li>Posiciona el botón.</li>
+                        <li><strong>Evento OnClick:</strong> Lo conectaremos en la sección 10.</li>
+                    </ul>
+                    <img src="images/inspector_button_play.png" alt="Inspector del Botón Play" class="inspector">
+                 </li>
+                 <li>
+                    <strong>Botón Pause:</strong> Repite el proceso para <code>ButtonPause</code> ("PAUSE").
+                    <img src="images/inspector_button_pause.png" alt="Inspector del Botón Pause" class="inspector">
+                 </li>
+                  <li>
+                    <strong>Botón Stop:</strong> Repite para <code>ButtonStop</code> ("STOP").
+                    <img src="images/inspector_button_stop.png" alt="Inspector del Botón Stop" class="inspector">
+                 </li>
+                 <li>
+                    <strong>Botón Next:</strong> Repite para <code>ButtonNext</code> ("NEXT").
+                    <img src="images/inspector_button_next.png" alt="Inspector del Botón Next" class="inspector">
+                 </li>
+                 <li>
+                    <strong>Botón Previous:</strong> Repite para <code>ButtonPrevious</code> ("PREV").
+                    <img src="images/inspector_button_previous.png" alt="Inspector del Botón Previous" class="inspector">
+                 </li>
+             </ol>
+             <p>Organiza los botones dentro de `PanelButtons`.</p>
+             <!-- Asumiendo una imagen hierarchy_with_buttons.png -->
+             <img src="images/hierarchy_with_buttons.png" alt="Jerarquía con Botones" class="hierarchy">
+        </section>
+
+         <section id="ui-sliders-ctrl">
+             <h2>7. Creando los Sliders de Volumen y Pitch</h2>
+             <p>Estos sliders controlarán el volumen y el tono (pitch) del audio.</p>
+             <ol>
+                 <li>
+                    <strong>Slider Volumen:</strong>
+                    <ul>
+                        <li>Haz clic derecho en `Canvas` -> `UI` -> `Slider`. Renómbralo a <code>SliderVolume</code>.</li>
+                        <li>Posiciónalo cerca de `TextVolume`.</li>
+                        <li>Configura el `Slider`: `Interactable` (marcado), `Direction` (Left To Right), `Min Value` (0), `Max Value` (1), `Value` inicial (1), `Whole Numbers` (desmarcado).</li>
+                        <li>Estiliza `Background`, `Fill` y `Handle`.</li>
+                        <li><strong>Evento OnValueChanged:</strong> Lo conectaremos en la sección 10.</li>
+                    </ul>
+                    <img src="images/inspector_slider_volume.png" alt="Inspector del Slider de Volumen" class="inspector">
+                 </li>
+                 <li>
+                    <strong>Slider Pitch:</strong>
+                    <ul>
+                        <li>Crea otro `Slider` -> <code>SliderPitch</code>.</li>
+                        <li>Posiciónalo cerca de `TextPitch`.</li>
+                         <li>Configura el `Slider`: `Interactable` (marcado), `Direction` (Left To Right), `Min Value` (0.5), `Max Value` (2), `Value` inicial (1), `Whole Numbers` (desmarcado).</li>
+                         <li>Estiliza `Background`, `Fill` y `Handle`.</li>
+                         <li><strong>Evento OnValueChanged:</strong> Lo conectaremos en la sección 10.</li>
+                    </ul>
+                     <img src="images/inspector_slider_pitch.png" alt="Inspector del Slider de Pitch" class="inspector">
+                 </li>
+             </ol>
+         </section>
+
+         <section id="ui-toggle">
+            <h2>8. Creando el Toggle "Play All"</h2>
+            <p>Este toggle permitirá activar/desactivar la reproducción continua (loop) de la lista de canciones.</p>
+             <ol>
+                 <li>
+                    Haz clic derecho en `Canvas` -> `UI` -> `Toggle`. Renómbralo a <code>TogglePlayAll</code>.
+                 </li>
+                 <li>
+                    Posiciónalo en la interfaz.
+                 </li>
+                 <li>
+                    Expande `TogglePlayAll`. Verás `Background`, `Checkmark` (dentro de Background) y `Label`.
+                    <ul>
+                        <li>Asigna sprites/colores a `Background` (estado apagado) y `Checkmark` (estado encendido).</li>
+                        <li>Selecciona `Label` (TextMeshPro o Text). Cambia el texto a "PLAY ALL". Ajusta estilo.</li>
+                    </ul>
+                 </li>
+                  <li>
+                    <strong>Configuración del Toggle:</strong> Selecciona `TogglePlayAll`. `Interactable` (marcado), `Is On` (desmarcado por defecto).
+                 </li>
+                 <li>
+                    <strong>Evento OnValueChanged:</strong> Lo conectaremos en la sección 10.
+                 </li>
+             </ol>
+              <!-- Asumiendo una imagen hierarchy_final_ui.png -->
+              <img src="images/hierarchy_final_ui.png" alt="Jerarquía con todos los elementos UI" class="hierarchy">
+              <!-- Asumiendo una imagen inspector_toggle_playall.png -->
+              <img src="images/inspector_toggle_playall.png" alt="Inspector del Toggle Play All" class="inspector">
+         </section>
+
+        <!-- ###################################################### -->
+        <!-- # NUEVA SECCIÓN 9: SCRIPT PASO A PASO                # -->
+        <!-- ###################################################### -->
+        <section id="script">
+            <h2>9. Creando el Script Controlador (MusicPlayerController.cs) - Paso a Paso</h2>
+            <p>Ahora crearemos el cerebro de nuestro reproductor. En lugar de copiar todo el código de golpe, lo construiremos paso a paso para entender mejor cada parte.</p>
+            <ol>
+                <li>En la ventana `Project`, ve a tu carpeta `Scripts`. Haz clic derecho -> `Create` -> `C# Script`. Nómbralo <code>MusicPlayerController</code>.</li>
+                <li>Haz doble clic en el script para abrirlo en tu editor de código (como Visual Studio). Borra el contenido por defecto (`Start` y `Update`) para empezar desde cero, dejando solo la definición de la clase vacía.</li>
+            </ol>
+
+            <h3>9.1 Estructura Básica, Interfaces y Namespaces (`using`)</h3>
+            <p>Primero, necesitamos importar las herramientas (namespaces) que Unity nos da para trabajar con UI, TextMeshPro y eventos. También definiremos la clase e indicaremos que usaremos interfaces para detectar cuándo el usuario arrastra el slider de progreso.</p>
+            <p>Añade el siguiente código al inicio de tu archivo <code>MusicPlayerController.cs</code>:</p>
+            <pre><code class="language-csharp"><span class="code-keyword">using</span> System.Collections;
+<span class="code-keyword">using</span> System.Collections.Generic;
+<span class="code-keyword">using</span> UnityEngine;
+<span class="code-keyword">using</span> UnityEngine.UI; <span class="code-comment">// Necesario para Button, Slider, Toggle, etc.</span>
+<span class="code-keyword">using</span> TMPro; <span class="code-comment">// Necesario para TextMeshProUGUI</span>
+<span class="code-keyword">using</span> UnityEngine.EventSystems; <span class="code-comment">// Necesario para las interfaces de Drag and Drop (Arrastrar y Soltar)</span>
+
+<span class="code-comment">// Añadimos las interfaces después de MonoBehaviour, separadas por comas.</span>
+<span class="code-comment">// Esto le dice a Unity que nuestra clase SABE CÓMO manejar estos eventos.</span>
+<span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-type">MusicPlayerController</span> : <span class="code-type">MonoBehaviour</span>, <span class="code-type">IBeginDragHandler</span>, <span class="code-type">IDragHandler</span>, <span class="code-type">IEndDragHandler</span>
+{
+    <span class="code-comment">// --- Aquí dentro irá el resto de nuestro código ---</span>
+
+} <span class="code-comment">// Fin de la clase MusicPlayerController</span>
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li><code>using ...;</code>: Importa funcionalidades predefinidas de Unity y C#.</li>
+                <li><code>public class MusicPlayerController : MonoBehaviour</code>: Define nuestra clase principal que hereda de `MonoBehaviour` (lo que permite adjuntarla a GameObjects en Unity).</li>
+                <li><code>, IBeginDragHandler, IDragHandler, IEndDragHandler</code>: Declara que esta clase implementará los métodos necesarios para responder cuando el usuario empiece a arrastrar (`OnBeginDrag`), continúe arrastrando (`OnDrag`) y suelte (`OnEndDrag`) un elemento UI (en nuestro caso, el `SliderProgress`).</li>
+            </ul>
+
+            <h3>9.2 Variables para Audio</h3>
+            <p>Necesitamos variables para guardar las referencias a los componentes `AudioSource` (los "reproductores" de sonido) y los `AudioClip` (los archivos de sonido).</p>
+            <p>Añade estas líneas <strong>dentro</strong> de las llaves `{}` de la clase `MusicPlayerController`:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Elementos de Audio ---</span>
+    [Header(<span class="code-string">"Audio Sources"</span>)] <span class="code-comment">// Ayuda a organizar en el Inspector</span>
+    <span class="code-keyword">public</span> <span class="code-type">AudioSource</span> AS_Music; <span class="code-comment">// Para reproducir la música principal</span>
+    <span class="code-keyword">public</span> <span class="code-type">AudioSource</span> AS_HUD;   <span class="code-comment">// Para sonidos de UI (clics, etc.)</span>
+
+    [Header(<span class="code-string">"Audio Clips"</span>)]
+    <span class="code-keyword">public</span> <span class="code-type">AudioClip</span> AC_Button_OK;     <span class="code-comment">// Sonido para clic genérico</span>
+    <span class="code-keyword">public</span> <span class="code-type">AudioClip</span> AC_Button_Stop;     <span class="code-comment">// Sonido específico para Stop</span>
+    <span class="code-keyword">public</span> <span class="code-type">AudioClip</span> AC_Slider_Effect; <span class="code-comment">// Sonido al mover slider (opcional)</span>
+    <span class="code-keyword">public</span> <span class="code-type">List</span>&lt;<span class="code-type">AudioClip</span>&gt; AC_Music; <span class="code-comment">// Lista para guardar todas las canciones</span>
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li><code>public</code>: Hace que estas variables sean visibles en el Inspector de Unity para que podamos arrastrar los componentes y archivos correspondientes.</li>
+                <li><code>AudioSource</code>: Tipo de componente que reproduce sonido.</li>
+                <li><code>AudioClip</code>: Tipo de archivo que contiene datos de sonido.</li>
+                <li><code>List&lt;AudioClip&gt;</code>: Una lista que puede contener múltiples `AudioClip` (nuestras canciones).</li>
+                <li><code>[Header("...")]</code>: Crea un título en el Inspector para mejor organización.</li>
+            </ul>
+
+            <h3>9.3 Variables para Elementos de UI</h3>
+            <p>Ahora, variables para guardar las referencias a todos los elementos de la interfaz (botones, textos, sliders, toggle) que creamos en la escena.</p>
+            <p>Añade estas líneas <strong>dentro</strong> de la clase, después de las variables de audio:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Elementos de UI (Referencias desde el Inspector) ---</span>
+    [Header(<span class="code-string">"Elementos de UI"</span>)]
+    <span class="code-keyword">public</span> <span class="code-type">Button</span> ButtonPlay;
+    <span class="code-keyword">public</span> <span class="code-type">Button</span> ButtonPause;
+    <span class="code-keyword">public</span> <span class="code-type">Button</span> ButtonStop;
+    <span class="code-keyword">public</span> <span class="code-type">Button</span> ButtonNext;
+    <span class="code-keyword">public</span> <span class="code-type">Button</span> ButtonPrevious;
+
+    <span class="code-keyword">public</span> <span class="code-type">TextMeshProUGUI</span> TextActualSong;      <span class="code-comment">// Texto para el nombre de la canción</span>
+    <span class="code-keyword">public</span> <span class="code-type">TextMeshProUGUI</span> TextProgressPercent; <span class="code-comment">// Texto para el tiempo (0:00 / 3:15)</span>
+    <span class="code-keyword">public</span> <span class="code-type">TextMeshProUGUI</span> TextVolume;          <span class="code-comment">// Opcional: para mostrar valor numérico</span>
+    <span class="code-keyword">public</span> <span class="code-type">TextMeshProUGUI</span> TextPitch;           <span class="code-comment">// Opcional: para mostrar valor numérico</span>
+    <span class="code-keyword">public</span> <span class="code-type">TextMeshProUGUI</span> TextTitleMultimedia; <span class="code-comment">// Referencia si quieres cambiar el título</span>
+
+    <span class="code-keyword">public</span> <span class="code-type">Toggle</span> TogglePlayAll;        <span class="code-comment">// El checkbox para repetir lista</span>
+
+    <span class="code-keyword">public</span> <span class="code-type">Slider</span> SliderProgress;       <span class="code-comment">// Barra de progreso de la canción</span>
+    <span class="code-keyword">public</span> <span class="code-type">Slider</span> SliderVolume;         <span class="code-comment">// Slider de volumen</span>
+    <span class="code-keyword">public</span> <span class="code-type">Slider</span> SliderPitch;          <span class="code-comment">// Slider de pitch</span>
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li>Declara variables públicas para cada tipo de componente UI (`Button`, `TextMeshProUGUI`, `Toggle`, `Slider`) para poder conectarlas en el Inspector.</li>
+            </ul>
+
+            <h3>9.4 Variables Internas</h3>
+            <p>Estas variables las usará el script para llevar la cuenta del estado actual (qué canción suena, si está reproduciendo, etc.). No necesitan ser `public` porque no las configuraremos desde el Inspector.</p>
+            <p>Añade estas líneas <strong>dentro</strong> de la clase, después de las variables de UI:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Variables Internas ---</span>
+    <span class="code-keyword">private</span> <span class="code-keyword">int</span> currentSongIndex = <span class="code-literal">0</span>; <span class="code-comment">// Índice de la canción actual en la lista AC_Music</span>
+    <span class="code-keyword">private</span> <span class="code-keyword">bool</span> isPlaying = <span class="code-keyword">false</span>;   <span class="code-comment">// ¿Está la música sonando ahora mismo?</span>
+    <span class="code-keyword">private</span> <span class="code-keyword">bool</span> playAll = <span class="code-keyword">false</span>;     <span class="code-comment">// ¿Está activado el modo "Play All" (loop de lista)?</span>
+    <span class="code-keyword">private</span> <span class="code-keyword">bool</span> isDraggingProgressBar = <span class="code-keyword">false</span>; <span class="code-comment">// ¿Está el usuario arrastrando la barra de progreso?</span>
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li><code>private</code>: Estas variables solo son accesibles desde dentro de este script.</li>
+                <li><code>currentSongIndex</code>: Guarda el número (posición) de la canción que está seleccionada o sonando.</li>
+                <li><code>isPlaying</code>: Un interruptor (verdadero/falso) para saber si `AS_Music.Play()` está activo.</li>
+                <li><code>playAll</code>: Guarda el estado del `TogglePlayAll`.</li>
+                <li><code>isDraggingProgressBar</code>: Importante para evitar que la barra se actualice automáticamente mientras el usuario la está moviendo manualmente.</li>
+            </ul>
+
+            <h3>9.5 Método `Start()` - Configuración Inicial</h3>
+            <p>El método `Start()` se ejecuta automáticamente una sola vez cuando el juego (o la escena) empieza. Lo usamos para configurar el estado inicial del reproductor.</p>
+            <p>Añade este método completo <strong>dentro</strong> de la clase:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Métodos de Unity ---</span>
+    <span class="code-keyword">void</span> Start()
+    {
+        <span class="code-comment">// 1. Configurar la primera canción</span>
+        <span class="code-keyword">if</span> (AC_Music != <span class="code-keyword">null</span> && AC_Music.Count > <span class="code-literal">0</span>) <span class="code-comment">// Comprobar si hay canciones</span>
+        {
+            AS_Music.clip = AC_Music[currentSongIndex]; <span class="code-comment">// Cargar el primer clip (índice 0) en el AudioSource</span>
+            UpdateSongInfo(); <span class="code-comment">// Actualizar el texto con nombre/número de canción (lo crearemos luego)</span>
+        }
+        <span class="code-keyword">else</span>
+        {
+            Debug.LogError(<span class="code-string">"MusicPlayerController: ¡No hay canciones asignadas en la lista AC_Music!"</span>);
+        }
+
+        <span class="code-comment">// 2. Sincronizar la UI con el estado inicial</span>
+        UpdateButtonStates(); <span class="code-comment">// Poner los botones Play/Pause/Stop en estado correcto (lo crearemos luego)</span>
+        SliderVolume.value = AS_Music.volume; <span class="code-comment">// Ajustar slider volumen al valor actual del AudioSource</span>
+        SliderPitch.value = AS_Music.pitch;   <span class="code-comment">// Ajustar slider pitch al valor actual del AudioSource</span>
+        TogglePlayAll.isOn = playAll;       <span class="code-comment">// Ajustar el toggle al valor inicial de playAll (false)</span>
+
+        <span class="code-comment">// 3. Conectar funciones a eventos de Sliders y Toggle POR CÓDIGO</span>
+        <span class="code-comment">//    (Alternativa/complemento a hacerlo en el Inspector)</span>
+        SliderVolume.onValueChanged.AddListener(OnSliderVolumeChanged); <span class="code-comment">// Llama a OnSliderVolumeChanged cuando cambie</span>
+        SliderPitch.onValueChanged.AddListener(OnSliderPitchChanged);   <span class="code-comment">// Llama a OnSliderPitchChanged cuando cambie</span>
+        TogglePlayAll.onValueChanged.AddListener(OnTogglePlayAllChanged); <span class="code-comment">// Llama a OnTogglePlayAllChanged cuando cambie</span>
+
+        <span class="code-comment">// 4. Asegurarse que el texto de progreso empiece en 00:00 / Duración</span>
+         UpdateProgressUI(<span class="code-literal">0</span>, AS_Music.clip != <span class="code-keyword">null</span> ? AS_Music.clip.length : <span class="code-literal">0</span>); <span class="code-comment">// Actualiza texto progreso (lo crearemos luego)</span>
+    }
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li>Carga la primera canción de la lista en el `AS_Music`.</li>
+                <li>Llama a funciones (que definiremos más tarde) para poner la UI (textos, botones) en su estado inicial.</li>
+                <li>Ajusta los sliders de volumen/pitch y el toggle a sus valores por defecto.</li>
+                <li><code>AddListener</code>: Es una forma de decir "cuando este evento ocurra (ej: el valor del slider cambie), ejecuta esta función".</li>
+                <li>Muestra un error en la consola si no hemos añadido canciones a la lista.</li>
+            </ul>
+
+            <h3>9.6 Método `Update()` - Lógica Continua</h3>
+            <p>El método `Update()` se ejecuta en cada fotograma del juego. Lo usaremos principalmente para actualizar la barra de progreso mientras la música suena y para detectar cuándo una canción termina.</p>
+            <p>Añade este método completo <strong>dentro</strong> de la clase:</p>
+            <pre><code class="language-csharp">
+    <span class="code-keyword">void</span> Update()
+    {
+        <span class="code-comment">// Solo actualizamos si la música está sonando Y el usuario NO está arrastrando la barra</span>
+        <span class="code-keyword">if</span> (isPlaying && !isDraggingProgressBar && AS_Music.clip != <span class="code-keyword">null</span> && AS_Music.clip.length > <span class="code-literal">0</span>)
+        {
+            <span class="code-comment">// Calcular progreso (tiempo actual / duración total) -> valor entre 0.0 y 1.0</span>
+            <span class="code-keyword">float</span> progress = AS_Music.time / AS_Music.clip.length;
+            SliderProgress.value = progress; <span class="code-comment">// Actualizar la posición del slider</span>
+            UpdateProgressUI(AS_Music.time, AS_Music.clip.length); <span class="code-comment">// Actualizar el texto MM:SS / MM:SS</span>
+
+            <span class="code-comment">// Detectar fin de canción para pasar a la siguiente (si aplica)</span>
+            <span class="code-comment">// Comprobamos si el tiempo actual está muy cerca del final</span>
+            <span class="code-keyword">if</span> (!AS_Music.loop && AS_Music.time >= AS_Music.clip.length - <span class="code-literal">0.1f</span>)
+            {
+                <span class="code-keyword">if</span> (playAll) <span class="code-comment">// Si está activado el repetir lista...</span>
+                {
+                    _ButtonNextSong(); <span class="code-comment">// ...pasamos a la siguiente automáticamente</span>
+                }
+                <span class="code-keyword">else</span> <span class="code-comment">// Si no...</span>
+                {
+                    _ButtonStop(); <span class="code-comment">// ...simplemente paramos la reproducción</span>
+                }
+            }
+        }
+         <span class="code-comment">// Si no está sonando y no arrastramos, asegurar que el texto marca 0 al inicio</span>
+         <span class="code-keyword">else</span> <span class="code-keyword">if</span> (!isPlaying && !isDraggingProgressBar)
+        {
+             <span class="code-keyword">if</span> (AS_Music.time == <span class="code-literal">0</span>) UpdateProgressUI(<span class="code-literal">0</span>, AS_Music.clip != <span class="code-keyword">null</span> ? AS_Music.clip.length : <span class="code-literal">0</span>);
+        }
+    }
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li>Comprueba si `isPlaying` es verdadero y `isDraggingProgressBar` es falso.</li>
+                <li>Calcula el progreso dividiendo el tiempo actual (`AS_Music.time`) por la duración total (`AS_Music.clip.length`).</li>
+                <li>Actualiza el valor del `SliderProgress` y llama a `UpdateProgressUI` (que haremos luego).</li>
+                <li>Comprueba si la canción ha llegado casi al final (`AS_Music.time >= ...`).</li>
+                <li>Si `playAll` está activo, llama a `_ButtonNextSong()` (que haremos luego). Si no, llama a `_ButtonStop()`.</li>
+            </ul>
+
+             <h3>9.7 Métodos para Botones</h3>
+            <p>Ahora crearemos las funciones públicas que se ejecutarán cuando hagamos clic en cada botón. Las llamamos desde el evento `OnClick` que configuraremos en el Inspector.</p>
+            <p>Añade estos métodos <strong>dentro</strong> de la clase:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Funciones para los Botones (Llamadas desde el Inspector) ---</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> _ButtonPlay()
+    {
+        <span class="code-keyword">if</span> (AC_Music == <span class="code-keyword">null</span> || AC_Music.Count == <span class="code-literal">0</span>) <span class="code-keyword">return</span>; <span class="code-comment">// No hacer nada si no hay canciones</span>
+
+        AS_Music.Play();         <span class="code-comment">// Inicia o reanuda la reproducción</span>
+        isPlaying = <span class="code-keyword">true</span>;        <span class="code-comment">// Marcar que está sonando</span>
+        UpdateButtonStates();    <span class="code-comment">// Actualizar estado botones Play/Pause/Stop</span>
+        PlaySound(AC_Button_OK); <span class="code-comment">// Reproducir sonido de clic (función auxiliar que haremos)</span>
+    }
+
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> _ButtonPause()
+    {
+        AS_Music.Pause();        <span class="code-comment">// Pausa la reproducción</span>
+        isPlaying = <span class="code-keyword">false</span>;       <span class="code-comment">// Marcar que NO está sonando</span>
+        UpdateButtonStates();    <span class="code-comment">// Actualizar botones</span>
+        PlaySound(AC_Button_OK); <span class="code-comment">// Sonido de clic</span>
+    }
+
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> _ButtonStop()
+    {
+        AS_Music.Stop();         <span class="code-comment">// Detiene la reproducción</span>
+        isPlaying = <span class="code-keyword">false</span>;       <span class="code-comment">// Marcar que NO está sonando</span>
+        AS_Music.time = <span class="code-literal">0</span>;        <span class="code-comment">// Rebobinar al principio (tiempo = 0)</span>
+        SliderProgress.value = <span class="code-literal">0</span>; <span class="code-comment">// Poner el slider a 0</span>
+        UpdateProgressUI(<span class="code-literal">0</span>, AS_Music.clip != <span class="code-keyword">null</span> ? AS_Music.clip.length : <span class="code-literal">0</span>); <span class="code-comment">// Actualizar texto a 00:00</span>
+        UpdateButtonStates();    <span class="code-comment">// Actualizar botones</span>
+        PlaySound(AC_Button_Stop); <span class="code-comment">// Sonido específico de Stop</span>
+    }
+
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> _ButtonNextSong()
+    {
+        <span class="code-keyword">if</span> (AC_Music == <span class="code-keyword">null</span> || AC_Music.Count <= <span class="code-literal">1</span>) <span class="code-keyword">return</span>; <span class="code-comment">// No hacer nada si no hay canciones o solo 1</span>
+
+        currentSongIndex = (currentSongIndex + <span class="code-literal">1</span>) % AC_Music.Count; <span class="code-comment">// Avanza índice y vuelve a 0 si llega al final</span>
+        ChangeSong(); <span class="code-comment">// Llama a la función que cambia la canción (la haremos luego)</span>
+        PlaySound(AC_Button_OK);
+    }
+
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> _ButtonPreviousSong()
+    {
+         <span class="code-keyword">if</span> (AC_Music == <span class="code-keyword">null</span> || AC_Music.Count <= <span class="code-literal">1</span>) <span class="code-keyword">return</span>; <span class="code-comment">// No hacer nada si no hay canciones o solo 1</span>
+
+        currentSongIndex--; <span class="code-comment">// Retrocede el índice</span>
+        <span class="code-keyword">if</span> (currentSongIndex &lt; <span class="code-literal">0</span>) <span class="code-comment">// Si es menor que 0...</span>
+        {
+            currentSongIndex = AC_Music.Count - <span class="code-literal">1</span>; <span class="code-comment">// ...va a la última canción de la lista</span>
+        }
+        ChangeSong(); <span class="code-comment">// Llama a la función que cambia la canción</span>
+         PlaySound(AC_Button_OK);
+    }
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li>Cada función corresponde a un botón y realiza la acción esperada (`Play`, `Pause`, `Stop`).</li>
+                <li>Actualizan la variable `isPlaying` y llaman a `UpdateButtonStates()` para reflejar el cambio en la UI.</li>
+                <li>`Stop` además rebobina la canción (`AS_Music.time = 0`).</li>
+                <li>`Next` y `Previous` calculan el nuevo `currentSongIndex`. El `% AC_Music.Count` (módulo) en `Next` asegura que el índice vuelva a 0 después de la última canción, creando un ciclo.</li>
+                <li>Llaman a funciones auxiliares `PlaySound` y `ChangeSong` (que crearemos pronto).</li>
+            </ul>
+
+            <h3>9.8 Métodos para Sliders y Toggle</h3>
+            <p>Estas funciones se ejecutarán cuando el usuario mueva los sliders de Volumen/Pitch o cambie el estado del Toggle "Play All". Las conectamos en `Start()` usando `AddListener`, o también se pueden conectar en el Inspector.</p>
+            <p>Añade estos métodos <strong>dentro</strong> de la clase:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Funciones para Sliders y Toggle (Llamadas desde Listener o Inspector) ---</span>
+
+    <span class="code-comment">// Se ejecuta cuando el valor del SliderVolume cambia</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> OnSliderVolumeChanged(<span class="code-keyword">float</span> value)
+    {
+        AS_Music.volume = value; <span class="code-comment">// Actualiza el volumen del AudioSource</span>
+        <span class="code-comment">// Opcional: Actualizar texto si tienes uno para mostrar el valor</span>
+        <span class="code-keyword">if</span> (TextVolume != <span class="code-keyword">null</span>) TextVolume.text = <span class="code-string">$"VOLUME: {value:P0}"</span>; <span class="code-comment">// P0 formatea como porcentaje sin decimales</span>
+        <span class="code-comment">// PlaySound(AC_Slider_Effect); // Podrías poner un sonido aquí si quieres</span>
+    }
+
+    <span class="code-comment">// Se ejecuta cuando el valor del SliderPitch cambia</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> OnSliderPitchChanged(<span class="code-keyword">float</span> value)
+    {
+        AS_Music.pitch = value; <span class="code-comment">// Actualiza el pitch (velocidad/tono) del AudioSource</span>
+         <span class="code-comment">// Opcional: Actualizar texto</span>
+         <span class="code-keyword">if</span> (TextPitch != <span class="code-keyword">null</span>) TextPitch.text = <span class="code-string">$"PITCH: {value:F2}x"</span>; <span class="code-comment">// F2 formatea como número con 2 decimales</span>
+         <span class="code-comment">// PlaySound(AC_Slider_Effect);</span>
+    }
+
+     <span class="code-comment">// Se ejecuta cuando el valor del SliderProgress cambia INTERACTIVAMENTE</span>
+     <span class="code-comment">// (Nota: Esta se conecta al OnValueChanged del SliderProgress en el Inspector)</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> OnSliderProgressValueChanged(<span class="code-keyword">float</span> value)
+    {
+        <span class="code-comment">// Solo actualizamos el TEXTO si el usuario está arrastrando</span>
+        <span class="code-keyword">if</span> (isDraggingProgressBar && AS_Music.clip != <span class="code-keyword">null</span>)
+        {
+             <span class="code-keyword">float</span> targetTime = value * AS_Music.clip.length; <span class="code-comment">// Calcula a qué tiempo corresponde el valor del slider</span>
+             UpdateProgressUI(targetTime, AS_Music.clip.length); <span class="code-comment">// Actualiza el texto MM:SS</span>
+             <span class="code-comment">// ¡OJO! No cambiamos AS_Music.time aquí, eso lo hacemos SOLO cuando suelta el ratón (OnEndDrag)</span>
+        }
+    }
+
+     <span class="code-comment">// Se ejecuta cuando el estado del TogglePlayAll cambia</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> OnTogglePlayAllChanged(<span class="code-keyword">bool</span> isOn) <span class="code-comment">// Recibe el nuevo estado (true si está marcado)</span>
+    {
+        playAll = isOn; <span class="code-comment">// Actualiza nuestra variable interna</span>
+        <span class="code-comment">// OJO: AS_Music.loop = playAll; solo funcionaría bien si quisiéramos repetir LA MISMA canción.</span>
+        <span class="code-comment">// Para repetir la lista, gestionamos el cambio de canción en Update() cuando termina.</span>
+         PlaySound(AC_Button_OK);
+    }
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li>Reciben el nuevo valor del control como parámetro (`float value` o `bool isOn`).</li>
+                <li>Actualizan la propiedad correspondiente del `AS_Music` (`volume`, `pitch`) o la variable interna (`playAll`).</li>
+                <li>`OnSliderProgressValueChanged` es un poco especial: solo actualiza el texto *mientras* se arrastra, pero no cambia el tiempo real de la canción hasta que se suelta el ratón.</li>
+                <li>Opcionalmente, actualizan los textos `TextVolume` y `TextPitch` para mostrar el valor numérico.</li>
+            </ul>
+
+             <h3>9.9 Métodos para Arrastrar el Slider de Progreso (Interfaces)</h3>
+            <p>Estos son los métodos que necesitamos implementar por haber añadido `IBeginDragHandler`, `IDragHandler` y `IEndDragHandler` a la definición de la clase. Se llamarán automáticamente cuando el usuario interactúe con el `SliderProgress` (siempre que hayamos añadido un componente `Event Trigger` en el Inspector, como veremos en la sección 10).</p>
+            <p>Añade estos métodos <strong>dentro</strong> de la clase:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Gestión Dragging Slider Progreso (Implementación Interfaces) ---</span>
+
+    <span class="code-comment">// Se llama UNA VEZ cuando el usuario EMPIEZA a arrastrar el objeto</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> OnBeginDrag(<span class="code-type">PointerEventData</span> eventData)
+    {
+        <span class="code-comment">// Comprobamos si el objeto que se empezó a arrastrar es nuestro SliderProgress</span>
+        <span class="code-keyword">if</span> (eventData.pointerDrag == SliderProgress.gameObject)
+        {
+            isDraggingProgressBar = <span class="code-keyword">true</span>; <span class="code-comment">// Marcamos que estamos arrastrando</span>
+            <span class="code-comment">// PlaySound(AC_Slider_Effect); // Sonido opcional al empezar</span>
+        }
+    }
+
+    <span class="code-comment">// Se llama CONTINUAMENTE mientras el usuario MANTIENE presionado y MUEVE el ratón</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> OnDrag(<span class="code-type">PointerEventData</span> eventData)
+    {
+         <span class="code-comment">// El propio Slider ya llama a OnSliderProgressValueChanged mientras arrastramos,</span>
+         <span class="code-comment">// así que ahí actualizamos la UI visualmente. Aquí podríamos hacer otras cosas si quisiéramos.</span>
+         <span class="code-comment">// Nos aseguramos de que el flag sigue activo por si acaso.</span>
+         <span class="code-keyword">if</span> (!isDraggingProgressBar && eventData.pointerDrag == SliderProgress.gameObject)
+         {
+              isDraggingProgressBar = <span class="code-keyword">true</span>;
+         }
+    }
+
+    <span class="code-comment">// Se llama UNA VEZ cuando el usuario SUELTA el botón del ratón</span>
+    <span class="code-keyword">public</span> <span class="code-keyword">void</span> OnEndDrag(<span class="code-type">PointerEventData</span> eventData)
+    {
+         <span class="code-comment">// Comprobamos si estábamos arrastrando y si soltamos sobre el SliderProgress</span>
+         <span class="code-keyword">if</span> (isDraggingProgressBar && eventData.pointerPress == SliderProgress.gameObject)
+         {
+            isDraggingProgressBar = <span class="code-keyword">false</span>; <span class="code-comment">// Marcamos que ya NO estamos arrastrando</span>
+            <span class="code-keyword">if</span> (AS_Music.clip != <span class="code-keyword">null</span>)
+            {
+                <span class="code-comment">// ¡AHORA SÍ! Aplicamos el cambio de tiempo en la reproducción</span>
+                AS_Music.time = SliderProgress.value * AS_Music.clip.length;
+                <span class="code-comment">// Actualizamos el texto MM:SS por última vez tras soltar</span>
+                UpdateProgressUI(AS_Music.time, AS_Music.clip.length);
+            }
+            <span class="code-comment">// PlaySound(AC_Button_OK); // Sonido opcional al soltar</span>
+         }
+    }
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li><code>OnBeginDrag</code>: Pone `isDraggingProgressBar` a `true` para que `Update()` deje de mover el slider automáticamente.</li>
+                <li><code>OnDrag</code>: No hace mucho aquí porque `OnSliderProgressValueChanged` ya se encarga de actualizar el texto mientras se arrastra.</li>
+                <li><code>OnEndDrag</code>: Pone `isDraggingProgressBar` a `false`. Lo más importante: calcula el tiempo (`AS_Music.time`) correspondiente a la posición final del slider (`SliderProgress.value`) y lo aplica, haciendo que la música salte a ese punto.</li>
+                <li><code>PointerEventData eventData</code>: Contiene información sobre el evento del ratón/puntero. Lo usamos para asegurarnos de que el evento ocurrió sobre nuestro slider.</li>
+            </ul>
+
+            <h3>9.10 Métodos Auxiliares (Helpers)</h3>
+            <p>Finalmente, creamos unas funciones privadas que nos ayudan a organizar el código y evitar repeticiones. Estas funciones son llamadas desde otros métodos que ya hemos creado.</p>
+            <p>Añade estos métodos <strong>dentro</strong> de la clase:</p>
+            <pre><code class="language-csharp">
+    <span class="code-comment">// --- Métodos Auxiliares ---</span>
+
+    <span class="code-comment">// Cambia la canción actual en el AudioSource</span>
+    <span class="code-keyword">void</span> ChangeSong()
+    {
+        AS_Music.Stop(); <span class="code-comment">// Para la canción anterior si estaba sonando</span>
+        AS_Music.clip = AC_Music[currentSongIndex]; <span class="code-comment">// Carga el nuevo AudioClip</span>
+        UpdateSongInfo(); <span class="code-comment">// Actualiza el texto del nombre de la canción</span>
+        SliderProgress.value = <span class="code-literal">0</span>; <span class="code-comment">// Resetea el slider de progreso</span>
+        UpdateProgressUI(<span class="code-literal">0</span>, AS_Music.clip != <span class="code-keyword">null</span> ? AS_Music.clip.length : <span class="code-literal">0</span>); <span class="code-comment">// Resetea el texto de progreso</span>
+
+        <span class="code-keyword">if</span> (isPlaying) <span class="code-comment">// Si el reproductor estaba en modo "Play" antes del cambio...</span>
+        {
+            AS_Music.Play(); <span class="code-comment">// ...inicia la nueva canción automáticamente</span>
+        }
+         <span class="code-comment">// Si no estaba en Play, no hacemos nada y se queda lista para darle al Play manualmente.</span>
+         <span class="code-comment">// En ambos casos, los botones se actualizarán porque Play/Stop llaman a UpdateButtonStates.</span>
+         <span class="code-comment">// Si quisiéramos asegurar actualización si NO estaba en Play: else { UpdateButtonStates(); }</span>
+    }
+
+    <span class="code-comment">// Actualiza el texto que muestra el nombre de la canción y su número</span>
+    <span class="code-keyword">void</span> UpdateSongInfo()
+    {
+        <span class="code-keyword">if</span> (TextActualSong != <span class="code-keyword">null</span> && AS_Music.clip != <span class="code-keyword">null</span> && AC_Music.Count > <span class="code-literal">0</span>)
+        {
+            <span class="code-comment">// Usamos string interpolation ($"...") para construir el texto</span>
+            TextActualSong.text = <span class="code-string">$"Playing: {AS_Music.clip.name} ({currentSongIndex + 1}/{AC_Music.Count})"</span>;
+        }
+         <span class="code-keyword">else</span> <span class="code-keyword">if</span> (TextActualSong != <span class="code-keyword">null</span>)
+        {
+             TextActualSong.text = <span class="code-string">"No songs loaded"</span>; <span class="code-comment">// Mensaje si no hay canciones</span>
+        }
+    }
+
+    <span class="code-comment">// Habilita/deshabilita los botones Play/Pause/Stop según el estado</span>
+    <span class="code-keyword">void</span> UpdateButtonStates()
+    {
+        <span class="code-comment">// Si no tenemos referencias a los botones, no hacer nada</span>
+        <span class="code-keyword">if</span> (ButtonPlay == <span class="code-keyword">null</span> || ButtonPause == <span class="code-keyword">null</span> || ButtonStop == <span class="code-keyword">null</span>) <span class="code-keyword">return</span>;
+
+        <span class="code-comment">// El botón Play SÓLO debe estar activo si NO está sonando</span>
+        ButtonPlay.interactable = !isPlaying;
+        <span class="code-comment">// El botón Pause SÓLO debe estar activo si SÍ está sonando</span>
+        ButtonPause.interactable = isPlaying;
+        <span class="code-comment">// El botón Stop debe estar activo si está sonando O si está pausado pero no al inicio (tiempo > 0)</span>
+        ButtonStop.interactable = isPlaying || AS_Music.time > <span class="code-literal">0.01f</span>; <span class="code-comment">// Pequeño margen por si acaso</span>
+
+        <span class="code-comment">// (Opcional) Habilitar/deshabilitar Next/Prev si solo hay una canción</span>
+        <span class="code-keyword">bool</span> canChangeTrack = AC_Music != <span class="code-keyword">null</span> && AC_Music.Count > <span class="code-literal">1</span>;
+        <span class="code-keyword">if</span>(ButtonNext != <span class="code-keyword">null</span>) ButtonNext.interactable = canChangeTrack;
+        <span class="code-keyword">if</span>(ButtonPrevious != <span class="code-keyword">null</span>) ButtonPrevious.interactable = canChangeTrack;
+    }
+
+     <span class="code-comment">// Formatea y actualiza el texto del progreso (ej: "01:23 / 04:50")</span>
+    <span class="code-keyword">void</span> UpdateProgressUI(<span class="code-keyword">float</span> currentTime, <span class="code-keyword">float</span> totalTime)
+    {
+        <span class="code-keyword">if</span> (TextProgressPercent != <span class="code-keyword">null</span>)
+        {
+            <span class="code-comment">// TimeSpan es útil para convertir segundos a formato MM:SS</span>
+            <span class="code-type">System.TimeSpan</span> current = <span class="code-type">System.TimeSpan</span>.FromSeconds(currentTime);
+            <span class="code-type">System.TimeSpan</span> total = <span class="code-type">System.TimeSpan</span>.FromSeconds(totalTime);
+
+            <span class="code-comment">// Formato "mm\:ss" asegura dos dígitos para minutos y segundos, con ':' literal</span>
+            TextProgressPercent.text = <span class="code-string">$"{current:mm\\:ss} / {total:mm\\:ss}"</span>;
+        }
+         <span class="code-comment">// Nota: La actualización del VALOR del slider se hace en Update() o OnEndDrag()</span>
+    }
+
+    <span class="code-comment">// Reproduce un sonido corto usando el AudioSource del HUD</span>
+    <span class="code-keyword">void</span> PlaySound(<span class="code-type">AudioClip</span> clip)
+    {
+        <span class="code-keyword">if</span> (AS_HUD != <span class="code-keyword">null</span> && clip != <span class="code-keyword">null</span>)
+        {
+            <span class="code-comment">// PlayOneShot es ideal para efectos de sonido, no interrumpe otros sonidos en el mismo source</span>
+            AS_HUD.PlayOneShot(clip);
+        }
+    }
+<span class="code-comment">// ¡Asegúrate de que esta llave cierra la clase MusicPlayerController!</span>
+}
+</code></pre>
+            <p><strong>Explicación:</strong></p>
+            <ul>
+                <li><code>ChangeSong</code>: Contiene la lógica para detener la canción actual, cargar la nueva, actualizar la UI relacionada y opcionalmente empezar a reproducir la nueva.</li>
+                <li><code>UpdateSongInfo</code>: Actualiza el `TextActualSong` con el nombre del clip y el número de canción.</li>
+                <li><code>UpdateButtonStates</code>: Activa/desactiva los botones Play, Pause y Stop según tenga sentido (no puedes pausar si no está sonando, etc.). Usa la propiedad `interactable` de los botones.</li>
+                <li><code>UpdateProgressUI</code>: Toma los tiempos en segundos y los convierte a formato "minutos:segundos" para mostrarlos en `TextProgressPercent`.</li>
+                <li><code>PlaySound</code>: Una función simple para reproducir los efectos de sonido de la UI usando el `AS_HUD` y `PlayOneShot`.</li>
+            </ul>
+
+            <p class="important">¡Felicidades! Si has seguido todos los pasos, ahora tienes el script <code>MusicPlayerController.cs</code> completo y, lo más importante, has visto cómo se construye cada parte y para qué sirve. Guarda el archivo.</p>
+            <p>El siguiente paso es volver a Unity, asignar este script al GameObject `MusicPlayerController` y conectar todas las referencias y eventos en el Inspector, como se describe en la sección 10.</p>
+
+        </section>
+        <!-- ###################################################### -->
+        <!-- # FIN NUEVA SECCIÓN 9                              # -->
+        <!-- ###################################################### -->
+
+        <section id="conexion">
+            <h2>10. Conectando la UI al Script</h2>
+            <p>Ahora es el momento de hacer que la UI interactúe con el script que acabamos de construir.</p>
+            <ol>
+                <li>
+                    <strong>Asignar Script:</strong> Selecciona el GameObject vacío <code>MusicPlayerController</code> en la Jerarquía. Arrastra el script <code>MusicPlayerController.cs</code> desde la ventana Project hasta el Inspector de este GameObject.
+                </li>
+                <li>
+                    <strong>Conectar Referencias:</strong> Verás todas las variables públicas del script en el Inspector (organizadas por los `[Header]`). Arrastra cada GameObject de la UI desde la Jerarquía al campo correspondiente en el script:
+                    <ul>
+                        <li>Arrastra `ButtonPlay` (el GameObject) al campo `Button Play` del script.</li>
+                        <li>Arrastra `ButtonPause` al campo `Button Pause`.</li>
+                        <li>...y así sucesivamente para `ButtonStop`, `ButtonNext`, `ButtonPrevious`.</li>
+                        <li>Arrastra `TextActualSong` (el GameObject con TextMeshPro) al campo `Text Actual Song`.</li>
+                        <li>...y así sucesivamente para `TextProgressPercent`, `TextVolume`, `TextPitch`, `TextTitleMultimedia`.</li>
+                        <li>Arrastra `TogglePlayAll` (el GameObject) al campo `Toggle Play All`.</li>
+                        <li>Arrastra `SliderProgress` (el GameObject) al campo `Slider Progress`.</li>
+                        <li>...y así sucesivamente para `SliderVolume` y `SliderPitch`.</li>
+                        <li><em>(Dejaremos las referencias de Audio para la siguiente sección).</em></li>
+                    </ul>
+                     <img src="images/inspector_musicplayercontroller.png" alt="Inspector del MusicPlayerController con referencias UI asignadas" class="inspector">
+                     <p class="important">Asegúrate de que TODAS las referencias de UI estén asignadas. Si falta alguna, tendrás errores de "Null Reference Exception" al ejecutar.</p>
+                </li>
+                <li>
+                    <strong>Configurar Eventos OnClick de Botones:</strong>
+                    <ul>
+                        <li>Selecciona `ButtonPlay` en la Jerarquía.</li>
+                        <li>En el Inspector, busca el componente `Button` y la sección `On Click ()`.</li>
+                        <li>Haz clic en el botón `+`.</li>
+                        <li>Arrastra el GameObject <code>MusicPlayerController</code> desde la Jerarquía al campo que dice "None (Object)".</li>
+                        <li>En el desplegable "No Function", selecciona `MusicPlayerController` -> `_ButtonPlay()`.</li>
+                        <li>Repite este proceso para los demás botones, conectándolos a sus funciones correspondientes:
+                            <ul>
+                                <li>`ButtonPause` -> `_ButtonPause()`</li>
+                                <li>`ButtonStop` -> `_ButtonStop()`</li>
+                                <li>`ButtonNext` -> `_ButtonNextSong()`</li>
+                                <li>`ButtonPrevious` -> `_ButtonPreviousSong()`</li>
+                            </ul>
+                         </li>
+                    </ul>
+                     <!-- Asume imagen mostrando la configuración del evento OnClick -->
+                     <img src="images/inspector_button_play_onclick.png" alt="Configuración OnClick del Botón Play" class="inspector">
+                </li>
+                 <li>
+                    <strong>Configurar Eventos de Sliders y Toggle (Método Inspector):</strong> Aunque añadimos listeners en `Start()` para Volumen, Pitch y Toggle, también podemos (o debemos, en el caso de Progress) hacerlo aquí.
+                    <ul>
+                        <li>Selecciona `SliderVolume`. En `On Value Changed (Single)`, haz clic `+`, arrastra `MusicPlayerController`, y selecciona `MusicPlayerController` -> `OnSliderVolumeChanged (dynamic float)`.</li>
+                        <li>Haz lo mismo para `SliderPitch` -> `OnSliderPitchChanged (dynamic float)`.</li>
+                        <li>Selecciona `TogglePlayAll`. En `On Value Changed (Boolean)`, haz clic `+`, arrastra `MusicPlayerController`, y selecciona `MusicPlayerController` -> `OnTogglePlayAllChanged (dynamic bool)`.</li>
+                        <li>Selecciona `SliderProgress`. En `On Value Changed (Single)`, haz clic `+`, arrastra `MusicPlayerController`, y selecciona `MusicPlayerController` -> `OnSliderProgressValueChanged (dynamic float)`.</li>
+                    </ul>
+                </li>
+                 <li>
+                     <strong>Configurar Eventos Drag del SliderProgress (Event Trigger):</strong> Esto es crucial para que la detección de arrastre funcione.
+                     <ul>
+                         <li>Selecciona `SliderProgress`.</li>
+                         <li>Haz clic en "Add Component" y busca y añade "Event Trigger".</li>
+                         <li>Haz clic en "Add New Event Type" y selecciona `BeginDrag`. En la nueva entrada, haz clic `+`, arrastra `MusicPlayerController` y selecciona `MusicPlayerController` -> `OnBeginDrag`.</li>
+                         <li>Haz clic "Add New Event Type" -> `Drag`. Haz clic `+`, arrastra `MusicPlayerController` -> `OnDrag`.</li>
+                         <li>Haz clic "Add New Event Type" -> `EndDrag`. Haz clic `+`, arrastra `MusicPlayerController` -> `OnEndDrag`.</li>
+                     </ul>
+                     <!-- Asume imagen mostrando EventTrigger y OnValueChanged del Slider Progress -->
+                     <img src="images/inspector_slider_progress_events.png" alt="Configuración Eventos del Slider de Progreso" class="inspector">
+                 </li>
+            </ol>
+            <p>¡Ahora la interfaz gráfica sabe qué funciones llamar en nuestro script cuando interactuamos con ella!</p>
+        </section>
+
+         <section id="audio">
+            <h2>11. Configurando el Audio</h2>
+            <p>Necesitamos configurar los AudioSource y asignar los clips de audio a nuestro script.</p>
+            <ol>
+                <li>
+                    <strong>Crear AudioSources:</strong>
+                    <ul>
+                        <li>Selecciona el GameObject <code>MusicPlayerController</code> en la Jerarquía.</li>
+                        <li>En el Inspector, haz clic en "Add Component" -> "Audio Source".</li>
+                        <li>En este primer Audio Source: desmarca `Play On Awake`. Ajusta `Spatial Blend` a `2D`. Este será `AS_Music`.</li>
+                        <li>Añade un SEGUNDO componente "Audio Source" al mismo GameObject.</li>
+                        <li>En este segundo Audio Source: desmarca `Play On Awake`. Ajusta `Spatial Blend` a `2D`. Este será `AS_HUD`.</li>
+                    </ul>
+                </li>
+                 <li>
+                    <strong>Asignar AudioSources al Script:</strong>
+                    <ul>
+                        <li>Con `MusicPlayerController` seleccionado, busca los campos `AS_Music` y `AS_HUD` en el script dentro del Inspector.</li>
+                        <li>Arrastra el primer componente Audio Source que añadiste (el de música) al campo `AS_Music`.</li>
+                        <li>Arrastra el segundo componente Audio Source (el de HUD) al campo `AS_HUD`.</li>
+                    </ul>
+                     <!-- Asume imagen mostrando esto -->
+                     <img src="images/inspector_musicplayercontroller_audiosources.png" alt="Asignación de AudioSources en el Inspector" class="inspector">
+                 </li>
+                <li>
+                    <strong>Asignar AudioClips al Script:</strong>
+                    <ul>
+                        <li>Busca la sección "Audio Clips" en el script (Inspector).</li>
+                        <li>Arrastra tus clips de sonido de botones desde la ventana Project a los campos `AC Button OK`, `AC Button Stop`, `AC Slider Effect` (si tienes uno).</li>
+                        <li>Busca la lista `AC Music`. Cambia su `Size` al número de canciones que tengas (ej: si tienes 3 canciones, pon `Size` a 3).</li>
+                        <li>Arrastra cada uno de tus archivos de música desde la ventana Project a los campos "Element 0", "Element 1", "Element 2", etc., que han aparecido en la lista `AC Music`.</li>
+                    </ul>
+                     <!-- Asume imagen mostrando esto -->
+                     <img src="images/inspector_musicplayercontroller_audioclips.png" alt="Asignación de AudioClips en el Inspector" class="inspector">
+                </li>
+                 <li>
+                    <strong>Configuración Adicional (Opcional):</strong>
+                    <ul>
+                         <li>Puedes ajustar el `Volume` inicial de `AS_Music` y `AS_HUD` en sus respectivos componentes Audio Source (aunque los sliders los controlarán después).</li>
+                         <li>Asegúrate de que `Loop` esté desmarcado en `AS_Music`.</li>
+                    </ul>
+                 </li>
+            </ol>
+        </section>
+
+         <section id="final">
+             <h2>12. ¡Prueba y Finalización!</h2>
+             <ol>
+                 <li>
+                    <strong>¡Ejecuta la Escena!</strong> Haz clic en el botón Play de Unity.
+                 </li>
+                 <li>
+                    <strong>Prueba todas las funcionalidades:</strong>
+                    <ul>
+                        <li>¿Funciona Play? ¿Se actualiza el texto de la canción y el progreso?</li>
+                        <li>¿Funciona Pause? ¿Y Stop?</li>
+                        <li>¿Funcionan Next y Previous?</li>
+                        <li>¿Puedes ajustar Volumen y Pitch con los sliders?</li>
+                        <li>¿Puedes arrastrar el slider de Progreso para buscar en la canción?</li>
+                        <li>¿Funciona el toggle "Play All" (pasa a la siguiente canción automáticamente al terminar)?</li>
+                        <li>¿Se escuchan los efectos de sonido de los botones?</li>
+                    </ul>
+                 </li>
+                 <li>
+                    <strong>Debugging:</strong> Si algo no funciona, revisa la Consola de Unity (`Window` -> `General` -> `Console`) en busca de errores (rojos). Los más comunes:
+                    <ul>
+                        <li><code>NullReferenceException</code>: Falta asignar una referencia en el Inspector (un botón, texto, slider, AudioSource o AudioClip en el `MusicPlayerController`). Revisa TODOS los campos públicos del script.</li>
+                        <li>Errores de compilación: Si el script tiene errores de sintaxis, la Consola lo indicará. Haz doble clic en el error.</li>
+                        <li>Eventos no conectados: Verifica que los `OnClick` de botones y los `OnValueChanged`/`Event Triggers` de sliders/toggle estén bien configurados en el Inspector (Sección 10).</li>
+                    </ul>
+                 </li>
+                 <li>
+                    <strong>Pulido Final:</strong> Ajusta la posición, tamaño y estilo de los elementos UI hasta que estés contento/a.
+                 </li>
+             </ol>
+             <p><strong>¡Felicidades!</strong> Has construido un reproductor de música funcional en Unity, aprendiendo sobre UI, Audio y Scripting paso a paso.</p>
+             <h3>Posibles Mejoras:</h3>
+                <ul>
+                    <li>Visualización de espectro de audio.</li>
+                    <li>Cargar listas de reproducción externas.</li>
+                    <li>Guardar/cargar preferencias (`PlayerPrefs`).</li>
+                    <li>Botón Shuffle (aleatorio).</li>
+                    <li>Animaciones y efectos visuales.</li>
+                </ul>
+        </section>
+
+        <footer>
+            <p>Tutorial creado como ejemplo - Basado en la práctica propuesta.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // JavaScript para la navegación entre secciones
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('#tutorial-nav a');
+            const sections = document.querySelectorAll('.container section');
+
+            function setActiveSection(hash) {
+                // Quitar clase activa de todos los links y secciones
+                navLinks.forEach(link => link.classList.remove('active'));
+                sections.forEach(section => section.classList.remove('active'));
+
+                // Encontrar y activar el link y sección correctos
+                const activeLink = document.querySelector(`#tutorial-nav a[href="${hash}"]`);
+                const activeSection = document.querySelector(hash);
+
+                if (activeLink) activeLink.classList.add('active');
+                if (activeSection) {
+                     activeSection.classList.add('active');
+                      // Scroll suave hacia la sección (solo si no es la intro inicial)
+                     if(window.location.hash || hash !== '#intro') {
+                        activeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                     }
+                } else if (hash === '#intro') {
+                     // Asegurarse que la intro se muestre si el hash no existe
+                     const introSection = document.querySelector('#intro');
+                     const introLink = document.querySelector(`#tutorial-nav a[href="#intro"]`);
+                     if(introSection) introSection.classList.add('active');
+                     if(introLink) introLink.classList.add('active');
+                     // Scroll al inicio si es la intro
+                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                 }
+            }
+
+            // Navegación al hacer clic
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevenir el comportamiento por defecto del ancla
+                    const targetHash = link.getAttribute('href');
+                    setActiveSection(targetHash);
+                    // Actualizar URL sin recargar para permitir copiar/pegar enlace y botones de navegador
+                    history.pushState(null, '', targetHash);
+                });
+            });
+
+            // Activar sección inicial basada en el hash de la URL (si existe) o la primera
+             const currentHash = window.location.hash || '#intro';
+             setActiveSection(currentHash);
+
+            // Manejar botones atrás/adelante del navegador
+            window.addEventListener('popstate', () => {
+               setActiveSection(window.location.hash || '#intro');
+            });
+        });
+    </script>
+
+</body>
+</html>
