@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Comparativa Cubase para HP Elite 8300 (Pop‑Rock)</title>
 <meta name="description" content="Comparativa de Cubase 9.5, 10.5, 12 y 14 para HP Elite 8300 con Scarlett 2i2. Recomendación final y ajustes sugeridos para pop‑rock.">
 <style>
@@ -14,36 +14,58 @@
   a{color:var(--accent);text-decoration:none}
   a:hover{text-decoration:underline}
   .wrap{max-width:1100px;margin:0 auto;padding:28px}
-  header{margin-bottom:18px}
-  h1{font-size:1.8rem;margin:.2rem 0 .4rem}
+  header{position:sticky;top:0;background:linear-gradient(180deg, rgba(11,16,32,.95), rgba(11,16,32,.80));backdrop-filter:saturate(1.2) blur(6px);z-index:10;margin-bottom:18px;border-bottom:1px solid rgba(38,48,107,.35)}
+  header .inner{max-width:1100px;margin:0 auto;padding:14px 28px}
+  h1{font-size:1.9rem;margin:.2rem 0 .2rem}
   .sub{color:var(--muted)}
   .grid{display:grid;gap:16px}
   .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-  @media (max-width:900px){.cols-2{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
-  .tag{display:inline-block;background:#0e1538;border:1px solid var(--line);border-radius:999px;padding:.2rem .6rem;margin-right:.35rem;font-size:.85rem}
-  table{width:100%;border-collapse:collapse}
+  @media (max-width:960px){.cols-2{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0}
+  .tag{display:inline-block;background:#0e1538;border:1px solid var(--line);border-radius:999px;padding:.2rem .6rem;margin:.2rem .35rem .2rem 0;font-size:.85rem;white-space:nowrap}
+  table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;will-change:transform;-webkit-overflow-scrolling:touch}
   th,td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:#cfd8ff;text-align:left}
+  th{color:#cfd8ff;text-align:left;white-space:nowrap}
   code{background:#0a0f26;border:1px solid #1e274f;border-radius:6px;padding:.1rem .35rem}
-  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#0f1637;border-radius:999px;padding:.2rem .55rem;font-size:.85rem}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#0f1637;border-radius:999px;padding:.2rem .55rem;font-size:.85rem;white-space:nowrap}
   .ok::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--good);display:inline-block}
   .warn::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--warn);display:inline-block}
-  .rec{font-weight:700;color:#eafff2}
-  .cta{display:inline-block;margin-top:10px;padding:.6rem .9rem;border-radius:10px;background:var(--accent);color:#0a1028;font-weight:700}
+  .cta{display:inline-block;margin-top:10px;padding:.7rem 1rem;border-radius:10px;background:var(--accent);color:#0a1028;font-weight:700}
   .small{font-size:.95rem;color:var(--muted)}
   ul{margin:0 0 0 1.2rem}
   h2{margin:.2rem 0 .6rem;font-size:1.3rem}
   h3{margin:.2rem 0 .4rem;font-size:1.1rem}
+
+  /* --------- Responsive tuning --------- */
+  @media (max-width:720px){
+    .wrap{padding:18px}
+    header .inner{padding:12px 18px}
+    h1{font-size:1.35rem}
+    .sub{font-size:.95rem}
+    .card{padding:14px;border-radius:14px}
+    th,td{padding:8px}
+    .cta{width:100%;text-align:center}
+  }
+  @media (max-width:420px){
+    h1{font-size:1.18rem}
+    .tag{font-size:.78rem}
+    .sub{font-size:.9rem}
+    .card{padding:12px}
+  }
+
+  /* Improve tap targets on mobile */
+  a, button{min-height:44px}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
+  <header>
+    <div class="inner">
       <h1>Comparativa Cubase para HP Elite 8300 (Pop‑Rock)</h1>
       <div class="sub">Equipo objetivo: <span class="tag">HP Elite 8300 · 32 GB RAM · SSD</span> <span class="tag">Interfaz: Focusrite Scarlett 2i2 (3ª gen)</span> <span class="tag">Uso: grabación y mezcla Pop‑Rock</span></div>
-    </header>
+    </div>
+  </header>
 
+  <div class="wrap">
     <section class="card">
       <h2>Resumen ejecutivo</h2>
       <p><strong>Recomendación principal:</strong> <span class="rec">Cubase 10.5 Pro</span>. Es el mejor equilibrio entre estabilidad, consumo moderado de CPU en tu HP y compatibilidad amplia (VST2 y VST3) para sesiones de pop‑rock sin dolores de cabeza.</p>
@@ -103,7 +125,7 @@
           </tr>
         </tbody>
       </table>
-      <p class="small">Escala de estabilidad orientativa según reportes comunitarios y experiencia típica en hardware similar.</p>
+      <p class="small">En móvil puedes desplazar la tabla horizontalmente si no cabe completa.</p>
     </section>
 
     <section class="card">
@@ -153,20 +175,10 @@
         <li>Mantén el sistema de audio limpio (sin antivirus pesados ni apps residentes).</li>
         <li>Crea plantillas y <em>stems</em> para colaborar entre tu Cubase 10.5 y otros sistemas.</li>
       </ul>
-    </section>
-
-    <section class="card">
-      <h2>Checklist rápido</h2>
-      <ul>
-        <li>Instalar versión elegida (10.5 recomendado) + Focusrite Control.</li>
-        <li>Configurar buffer y sample rate según fase (grabación/mezcla).</li>
-        <li>Verificar drivers USB y desactivar ahorro de energía.</li>
-        <li>Crear plantilla de proyecto pop‑rock y probar latencia real con la 2i2.</li>
-      </ul>
       <a class="cta" href="#" onclick="window.print();return false;">Imprimir / Guardar como PDF</a>
     </section>
 
-    <footer class="small">Documento elaborado para HP Elite 8300 con 32 GB RAM y Focusrite Scarlett 2i2 (3ª gen). Enfoque: sesiones de pop‑rock con Cubase.</footer>
+    <footer class="small" style="margin:24px 0 48px;color:var(--muted)">Documento elaborado para HP Elite 8300 con 32 GB RAM y Focusrite Scarlett 2i2 (3ª gen). Enfoque: sesiones de pop‑rock con Cubase. · <a href="#top">Volver arriba</a></footer>
   </div>
 </body>
 </html>
