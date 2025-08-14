@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guía completa: Doble boot Windows 10 para Cubase (HP Elite 8300 + Scarlett 2i2)</title>
+  <meta name="description" content="Pasos detallados para instalar Windows 10 Pro optimizado para audio y configurar un arranque dual con otro Windows 10 para Cubase VST32 en un HP Elite 8300 con Scarlett 2i2 3rd Gen." />
+  <style>
+    :root{
+      --bg:#0f1222; --panel:#141836; --soft:#1d2350; --muted:#98a1c0; --text:#e7ebff; --accent:#7aa2ff; --ok:#59d390; --warn:#ffc857; --bad:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;line-height:1.45}
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{display:grid;grid-template-columns:290px 1fr;gap:20px;max-width:1200px;margin:0 auto;padding:24px}
+    nav{position:sticky;top:16px;align-self:start;background:var(--panel);border:1px solid #262b57;border-radius:16px;padding:16px}
+    nav h2{font-size:1.05rem;margin:.2rem 0 0.6rem;color:#cbd6ff}
+    nav ul{list-style:none;padding:0;margin:0;display:grid;gap:.35rem}
+    nav li a{display:block;padding:.4rem .6rem;border-radius:8px}
+    nav li a:hover{background:var(--soft)}
+    main{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent 200px),var(--panel);border:1px solid #262b57;border-radius:20px;padding:24px}
+    header h1{font-size:1.6rem;margin:.2rem 0 .6rem}
+    header .meta{color:var(--muted);font-size:.95rem}
+    section{margin:32px 0;padding-top:12px}
+    section h3{font-size:1.25rem;margin:0 0 10px}
+    .card{background:var(--soft);border:1px solid #2a2f66;border-radius:16px;padding:16px;margin:14px 0}
+    .grid{display:grid;gap:14px}
+    .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    @media (max-width:900px){.wrap{grid-template-columns:1fr} .grid.cols-2,.grid.cols-3{grid-template-columns:1fr}}
+    code,pre{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#0b0f25;border:1px solid #233; border-radius:10px}
+    code{padding:.1rem .35rem}
+    pre{padding:12px;overflow:auto}
+    .pill{display:inline-flex;align-items:center;gap:8px;background:#0e1538;border:1px solid #2a2f66;color:#cbd6ff;border-radius:999px;padding:.25rem .6rem;font-size:.85rem;margin-right:.4rem}
+    .status{display:inline-flex;align-items:center;gap:6px}
+    .status.ok::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--ok)}
+    .status.warn::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--warn)}
+    .status.bad::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--bad)}
+    .checklist input{accent-color:var(--accent)}
+    .kbd{display:inline-block;padding:.05rem .35rem;border:1px solid #566; border-radius:6px;background:#0e142e;font-family:inherit;font-size:.85em}
+    .note{font-size:.95rem;color:#cbd6ff}
+    .muted{color:var(--muted)}
+    .callout{border-left:4px solid var(--accent);background:#0e1538;padding:12px 14px;border-radius:10px}
+    .danger{border-left-color:var(--bad);}
+    .success{border-left-color:var(--ok);}
+    .steps{counter-reset:step}
+    .steps > li{list-style:none;position:relative;margin:14px 0;padding-left:46px}
+    .steps > li::before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;transform:translateY(0);width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#06102b;font-weight:700}
+    .kbd-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .kbd-row .kbd{background:#081133}
+    .tbl{width:100%;border-collapse:collapse}
+    .tbl th,.tbl td{border-bottom:1px solid #2a2f66;padding:10px;text-align:left}
+    .tbl th{color:#cbd6ff}
+    footer{margin-top:36px;color:var(--muted);font-size:.9rem}
+    .toc-small{font-size:.92rem}
+    .tag{background:#10173a;border:1px solid #2a2f66;border-radius:8px;padding:.15rem .45rem;margin-right:.35rem}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <h2>Índice rápido</h2>
+      <ul class="toc-small">
+        <li><a href="#requisitos">Requisitos y decisiones</a></li>
+        <li><a href="#preparacion-usb">Crear USB y preparar SSD</a></li>
+        <li><a href="#instalacion-w10">Instalar Windows 10 Pro (SSD nuevo)</a></li>
+        <li><a href="#hp-elite-8300-bios">Ajustes BIOS/UEFI (HP Elite 8300)</a></li>
+        <li><a href="#drivers-base">Drivers base y red</a></li>
+        <li><a href="#focusrite">Instalar Scarlett 2i2 y ASIO</a></li>
+        <li><a href="#optimizacion-audio">Optimización Windows para audio</a></li>
+        <li><a href="#instalar-cubase">Instalar Cubase 10/12/14</a></li>
+        <li><a href="#dual-boot">Configurar el arranque dual</a></li>
+        <li><a href="#proyectos-datos">Estructura de proyectos y datos</a></li>
+        <li><a href="#mantenimiento">Mantenimiento y buenas prácticas</a></li>
+        <li><a href="#anexos">Anexos (comandos útiles, checklist, plan B)</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <header>
+        <h1>Guía completa: Doble boot de Windows 10 para Cubase en HP Elite 8300 (32 GB RAM) + Scarlett 2i2</h1>
+        <div class="meta">Objetivo: dejar un <strong>SSD nuevo</strong> con <strong>Windows 10 Pro 22H2</strong> optimizado para audio (Cubase 10/12/14) y mantener otro SSD con <strong>Windows 10 + Cubase VST32</strong> para proyectos antiguos, con un menú de arranque para elegir en el inicio.</div>
+        <p class="note"><span class="tag">Equipo</span> HP Elite 8300 · <span class="tag">RAM</span> 32 GB · <span class="tag">Interfaz</span> Focusrite Scarlett 2i2 3ª Gen · <span class="tag">DAW</span> Cubase 10/12/14 y Cubase VST32</p>
+      </header>
+
+      <section id="requisitos">
+        <h3>1) Requisitos y decisiones previas</h3>
+        <div class="grid cols-2">
+          <div class="card">
+            <strong>Software necesario</strong>
+            <ul>
+              <li>Imagen oficial de <a href="https://www.microsoft.com/es-es/software-download/windows10" target="_blank" rel="noopener">Windows 10</a> (Media Creation Tool).</li>
+              <li>Drivers HP (chipset/MEI/Intel RST si aplica) para Elite 8300.</li>
+              <li><a href="https://downloads.focusrite.com/focusrite/scarlett-2i2-3rd-gen" target="_blank" rel="noopener">Focusrite Control + Driver ASIO</a>.</li>
+              <li>Instalador de Cubase (10/12/14) + Steinberg Download Assistant / eLicenser o Steinberg Licensing.</li>
+              <li>Herramienta de arranque: <strong>MSCONFIG</strong> o <a href="https://neosmart.net/EasyBCD/" target="_blank" rel="noopener">EasyBCD</a> (opcional, facilita).</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Decisiones clave</strong>
+            <ul>
+              <li><span class="status ok"></span> <strong>Windows 10 Pro 64 bit (22H2)</strong> para el SSD nuevo.</li>
+              <li><span class="status warn"></span> Licencia: idealmente, una por instalación. En la práctica, en <em>misma placa</em> suele reactivar por hardware; si no, activa más tarde.</li>
+              <li><span class="status ok"></span> Cada Windows con su propia partición (no mezclar Usuarios/Documentos entre sistemas).</li>
+              <li><span class="status ok"></span> Proyectos en una carpeta común de datos (tercer disco/partición compartida).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout danger"><strong>Backup</strong>: si el SSD viejo contiene proyectos/ajustes críticos, realiza copia de seguridad antes de tocar nada.</div>
+      </section>
+
+      <section id="preparacion-usb">
+        <h3>2) Crear USB de instalación y preparar el SSD nuevo</h3>
+        <ol class="steps">
+          <li>En otro PC o en el mismo, descarga el <em>Media Creation Tool</em> y crea un USB booteable (8 GB o más).</li>
+          <li><strong>Desconecta físicamente</strong> el SSD viejo (el que tiene el Windows con Cubase VST32) para proteger su arranque.</li>
+          <li>Conecta solo el <strong>SSD nuevo</strong>. Inserta el USB y enciende el PC.</li>
+        </ol>
+        <div class="card">
+          <strong>Acceder al menú de arranque/BIOS en HP Elite 8300</strong>
+          <div class="kbd-row"><span class="kbd">Esc</span><span class="kbd">F9</span><span class="kbd">F10</span></div>
+          <ul class="note">
+            <li><span class="kbd">Esc</span> al encender → menú de inicio.</li>
+            <li><span class="kbd">F9</span> → seleccionar dispositivo de arranque (USB).</li>
+            <li><span class="kbd">F10</span> → BIOS Setup.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="instalacion-w10">
+        <h3>3) Instalar Windows 10 Pro (SSD nuevo)</h3>
+        <ol class="steps">
+          <li>Arranca desde el USB de Windows 10. Elige <strong>Edición: Pro</strong>, idioma y teclado.</li>
+          <li>Cuando pregunte por clave, pulsa <em>No tengo clave</em>. (Activaremos después).</li>
+          <li>En <strong>Opciones de unidad</strong>: elimina particiones del SSD nuevo y crea una nueva (Windows generará las necesarias). Formatea si es preciso.</li>
+          <li>Completa la instalación <strong>sin conectar a Internet</strong> para evitar drivers genéricos automáticos.</li>
+          <li>Crea una <strong>cuenta local</strong> (nombre sencillo, sin espacios para ruta corta; p. ej. <code>Jose</code>).</li>
+        </ol>
+        <div class="callout">
+          <strong>Consejo</strong>: omite Cortana, OneDrive y telemetría durante el OOBE si se ofrece. Lo activaremos solo si lo necesitas.
+        </div>
+      </section>
+
+      <section id="hp-elite-8300-bios">
+        <h3>4) Ajustes BIOS/UEFI recomendados (HP Elite 8300)</h3>
+        <div class="grid cols-2">
+          <div class="card">
+            <strong>Básicos</strong>
+            <ul>
+              <li><em>SATA Mode</em>: <strong>AHCI</strong> (no IDE). Si cambias desde IDE en un Windows ya instalado, habilita AHCI en registro antes.</li>
+              <li><em>Boot Order</em>: pon <strong>SSD nuevo</strong> como primero.</li>
+              <li>Desactiva <em>Network/PXE Boot</em> si no lo usas.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Rendimiento y estabilidad</strong>
+            <ul>
+              <li>Desactiva <em>Spread Spectrum</em> (si está disponible) para estabilidad de reloj.</li>
+              <li>Activa <em>Execute Disable Bit</em> / <em>VT-x</em> (no afecta audio, pero útil para herramientas).</li>
+              <li>Fija ventiladores en perfil <em>Normal</em> o <em>Performance</em> para evitar thermal throttling.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="drivers-base">
+        <h3>5) Instalar drivers base y red</h3>
+        <ol class="steps">
+          <li>Instala **chipset/MEI** y controladores de red desde la página de soporte de HP para Elite 8300.</li>
+          <li>Conecta Internet y ejecuta <strong>Windows Update</strong> una vez para parches críticos (no dejes <em>instalación automática</em> activa).</li>
+          <li>Opcional: si usas almacenamiento adicional SATA/NVMe con drivers, instálalos ahora.</li>
+        </ol>
+        <div class="callout warn"><strong>Evita</strong> que Windows reemplace más tarde el driver de audio por uno genérico: bloquea actualizaciones de drivers en <em>Configuración → Sistema → Información → Configuración avanzada del sistema → Hardware → Configuración de instalación de dispositivos</em>.</div>
+      </section>
+
+      <section id="focusrite">
+        <h3>6) Instalar Focusrite Scarlett 2i2 (3ª Gen) y ASIO</h3>
+        <ol class="steps">
+          <li>Descarga e instala <strong>Focusrite Control</strong> (incluye el driver ASIO). Reinicia si lo pide.</li>
+          <li>Conecta la Scarlett directamente a un puerto USB trasero (evita hubs). Desactiva ahorro de energía del USB (ver sección 7).</li>
+          <li>En Focusrite Control, define <em>Sample Rate</em> (44.1/48 kHz) y revisa <em>Buffer Size</em>.</li>
+        </ol>
+        <table class="tbl">
+          <thead><tr><th>Uso</th><th>Buffer sugerido</th><th>Latencia aproximada</th></tr></thead>
+          <tbody>
+            <tr><td>Grabación (monitoreo en vivo)</td><td>128–256 samples</td><td>6–10 ms</td></tr>
+            <tr><td>Mezcla (muchos plugins)</td><td>512–1024 samples</td><td>12–22 ms</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="optimizacion-audio">
+        <h3>7) Optimización de Windows para audio (baja latencia)</h3>
+        <div class="grid cols-2">
+          <div class="card">
+            <strong>Plan de energía</strong>
+            <ul>
+              <li>Panel de control → <em>Opciones de energía</em> → <strong>Alto rendimiento</strong>.</li>
+              <li>Suspensión de disco: <strong>Nunca</strong>. Estado mínimo del procesador: 100% (opcional si notas picos de DPC).</li>
+              <li>USB: desactiva <strong>Suspensión selectiva</strong>.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Audio y dispositivos</strong>
+            <ul>
+              <li>Panel de control → Sonido → pestaña <em>Reproducción/Grabación</em>: establece la Scarlett como predeterminada o <em>deshabilita</em> audio integrado.
+              </li>
+              <li>Propiedades de los dispositivos → pestaña <em>Avanzado</em>: desmarca <em>Permitir que las aplicaciones tomen el control exclusivo</em> (según flujo de trabajo).</li>
+              <li>Desactiva <em>Mejoras</em>/efectos.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>USB y energía</strong>
+            <ul>
+              <li>Administrador de dispositivos → Controladoras de bus serie universal → cada <em>Hub</em> / <em>Root Hub</em> → Propiedades → <em>Administración de energía</em> → desmarca <em>Permitir que el equipo apague…</em></li>
+              <li>Evita puertos frontales/hubs no alimentados.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Servicios y procesos</strong>
+            <ul>
+              <li>Desactiva <em>Game Bar</em> / <em>Game DVR</em> y <em>Modo Juego</em>.</li>
+              <li>Desinstala bloatware/OneDrive si no lo usas.</li>
+              <li>Antivirus: usa Windows Defender con exclusiones para carpetas de proyectos y VST.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <strong>Opcional avanzado (con punto de restauración)</strong>
+          <ul>
+            <li>Deshabilitar <em>HPET</em> o limitar <em>Timers</em> solo si miden DPC alto y comprueban mejora.</li>
+            <li>En <em>msconfig</em> → Inicio selectivo: deshabilita programas no críticos.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="instalar-cubase">
+        <h3>8) Instalar Cubase 10/12/14</h3>
+        <ol class="steps">
+          <li>Instala <strong>Steinberg Download Assistant</strong>. Descarga tu versión (10/12/14) y contenido.</li>
+          <li>Licencias: 
+            <ul>
+              <li>Cubase 10: eLicenser USB/Soft-eLicenser.</li>
+              <li>Cubase 12/14: <strong>Steinberg Licensing</strong> con cuenta (sin dongle).</li>
+            </ul>
+          </li>
+          <li>Ubicaciones sugeridas:
+            <ul>
+              <li>VST2 (si procede): <code>C:\\VSTPlugins</code></li>
+              <li>VST3: <code>C:\\Program Files\\Common Files\\VST3</code> (por defecto)</li>
+              <li>Bibliotecas pesadas: en un disco de datos dedicado (no en C:).</li>
+            </ul>
+          </li>
+          <li>Primer arranque: selecciona driver <strong>ASIO Focusrite</strong> y ajusta buffer según tarea.</li>
+        </ol>
+        <div class="callout success"><strong>Tip</strong>: crea plantillas (Templates) de proyecto para <em>Grabación</em> y <em>Mezcla</em> con buffers distintos. Ahorra tiempo.</div>
+      </section>
+
+      <section id="dual-boot">
+        <h3>9) Configurar el arranque dual (Dual Boot)</h3>
+        <ol class="steps">
+          <li>Apaga el PC y <strong>reconecta</strong> el SSD viejo (Windows + Cubase VST32).</li>
+          <li>En BIOS (<span class="kbd">F10</span>), asegura que el <strong>SSD nuevo</strong> es el primer disco de arranque.</li>
+          <li>Arranca en Windows nuevo. Abre <span class="kbd">msconfig</span> → pestaña <em>Arranque</em>.
+            <ul>
+              <li>Si detecta ambas instalaciones, nómbralas: <em>Windows Nuevo (Cubase 10/12/14)</em> y <em>Windows Antiguo (VST32)</em>.</li>
+              <li>Si no aparece el antiguo, usa <a href="https://neosmart.net/EasyBCD/" target="_blank" rel="noopener">EasyBCD</a> → <em>Add New Entry</em> → <em>Windows</em> → selecciona la partición del SSD viejo → <em>Add</em>.</li>
+              <li>Establece el sistema por defecto y el tiempo de espera (p. ej. 5–10 s).</li>
+            </ul>
+          </li>
+          <li>Reinicia y comprueba el menú de selección al inicio.</li>
+        </ol>
+        <div class="card">
+          <strong>Comandos útiles (avanzado)</strong>
+          <pre>powercfg /h off
+bcdedit /timeout 8
+bcdedit /enum firmware
+bcdedit /set {current} description "Windows Nuevo (Cubase 10/12/14)"</pre>
+        </div>
+        <div class="callout warn"><strong>Licencia de Windows</strong>: lo habitual es que se active por huella de hardware al ser la misma placa. Si no, activa manualmente con tu clave o compra una adicional.</div>
+      </section>
+
+      <section id="proyectos-datos">
+        <h3>10) Estructura de proyectos y datos compartidos</h3>
+        <div class="grid cols-2">
+          <div class="card">
+            <strong>Estrategia recomendada</strong>
+            <ul>
+              <li>Crea una partición/disco <strong>D:\\Audio</strong> accesible desde ambos Windows.</li>
+              <li>Estructura por DAW/cliente/fecha: <code>D:\\Audio\\Cubase14\\&lt;Proyecto&gt;</code>, <code>...\\CubaseVST32\\&lt;Proyecto&gt;</code>.</li>
+              <li>Evita rutas con espacios/caracteres raros.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Compatibilidad proyectos antiguos</strong>
+            <ul>
+              <li>Congela/Exporta stems de proyectos VST32 si los migras a versiones nuevas.</li>
+              <li>Documenta plugins legacy usados (versión exacta) en un <code>README.txt</code> por proyecto.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="mantenimiento">
+        <h3>11) Mantenimiento y buenas prácticas</h3>
+        <ul class="steps">
+          <li>Desactiva Windows Update automático; actualiza manualmente cada 2–3 meses y antes crea un <strong>Punto de restauración</strong>.</li>
+          <li>Exclusiones en antivirus para carpetas de proyectos y VST.</li>
+          <li>Evita instalar software innecesario en el sistema de audio.</li>
+          <li>Antes de sesiones importantes: reinicia el PC, desconecta apps en segundo plano (navegadores, mensajería).</li>
+          <li>Haz imagen del sistema con <em>Macrium Reflect</em> o similar una vez esté estable.</li>
+        </ul>
+      </section>
+
+      <section id="anexos">
+        <h3>12) Anexos</h3>
+        <div class="card">
+          <strong>Checklist rápido (marca cada paso)</strong>
+          <div class="checklist">
+            <label><input type="checkbox"> USB de instalación creado (W10 Pro 22H2)</label><br>
+            <label><input type="checkbox"> SSD viejo desconectado físicamente</label><br>
+            <label><input type="checkbox"> SSD nuevo en AHCI y primero en arranque</label><br>
+            <label><input type="checkbox"> Instalación sin conexión y cuenta local creada</label><br>
+            <label><input type="checkbox"> Drivers HP (chipset/red) instalados</label><br>
+            <label><input type="checkbox"> Focusrite Control + ASIO instalados</label><br>
+            <label><input type="checkbox"> Plan de energía y USB optimizados</label><br>
+            <label><input type="checkbox"> Cubase 10/12/14 instalado y probado</label><br>
+            <label><input type="checkbox"> Reconexión de SSD viejo y configuración del boot</label><br>
+            <label><input type="checkbox"> Carpeta de proyectos común configurada</label>
+          </div>
+        </div>
+        <div class="grid cols-2">
+          <div class="card">
+            <strong>Recuperación de arranque (si el viejo no aparece)</strong>
+            <pre>diskpart
+list volume
+exit
+bcdboot D:\\Windows</pre>
+            <p class="muted">Sustituye <code>D:\\Windows</code> por la letra de la partición donde esté la instalación antigua.</p>
+          </div>
+          <div class="card">
+            <strong>Desactivar hibernación y liberar espacio</strong>
+            <pre>powercfg /h off</pre>
+          </div>
+        </div>
+        <div class="callout danger"><strong>Advertencia</strong>: evita tocar el registro o servicios críticos si no es necesario. Crea siempre un punto de restauración antes de cambios avanzados.</div>
+      </section>
+
+      <footer>
+        <p>Guía diseñada para HP Elite 8300 con 32 GB RAM y Focusrite Scarlett 2i2 3ª Gen. Compatible con Cubase 10/12/14 y mantenimiento de un entorno legacy con Cubase VST32.</p>
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
