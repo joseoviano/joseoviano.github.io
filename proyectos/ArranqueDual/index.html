@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doble arranque: 2× Windows 10 en dos discos (Guía completa)</title>
+  <meta name="description" content="Cómo configurar un arranque dual con dos instalaciones de Windows 10 en dos discos distintos. Incluye preparación, instalación, UEFI/BIOS, BCD/boot manager y soluciones de errores." />
+  <style>
+    :root{
+      --bg: #0b1020; --card: #111834; --muted: #9fb0ff; --text: #e9ecff;
+      --accent: #7aa2ff; --accent-2: #00d4ff; --ok: #38d39f; --warn: #ffd166; --danger:#ff6b6b;
+      --shadow: 0 10px 30px rgba(0,0,0,.35); --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; background: radial-gradient(1200px 800px at 10% -10%, #16255f 0%, var(--bg) 60%);
+      color:var(--text); font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial}
+    a{color:var(--accent)}
+    .container{width:min(1200px,100% - 32px); margin-inline:auto}
+    header{position:sticky; top:0; z-index:50; backdrop-filter:blur(10px);
+      background:linear-gradient(180deg, rgba(2,8,23,.8), rgba(2,8,23,.4)); border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{display:flex; align-items:center; gap:16px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700}
+    .brand .logo{width:32px; height:32px; border-radius:10px; background:linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow:var(--shadow)}
+    .chip{font-size:.85rem; color:#0b1020; background:var(--muted); padding:2px 8px; border-radius:999px}
+    .actions{margin-left:auto; display:flex; gap:8px}
+    button{cursor:pointer; border:0; border-radius:12px; padding:10px 14px; background:#1a2552; color:var(--text); box-shadow:var(--shadow)}
+    button:hover{filter:brightness(1.1)}
+    .hero{display:grid; gap:24px; padding:32px 0 24px}
+    .hero h1{font-size: clamp(1.6rem, 1.2rem + 2.2vw, 2.6rem); line-height:1.2; margin:0}
+    .hero p{margin:0; color:#cbd5ff}
+    .hero .grid{display:grid; grid-template-columns:1.2fr .8fr; gap:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius); box-shadow:var(--shadow)}
+    .card.pad{padding:18px}
+    .grid-2{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:16px}
+    .grid-3{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:16px}
+    section{margin:28px 0}
+    section h2{font-size: clamp(1.25rem, 1rem + 1vw, 1.8rem); margin:0 0 12px}
+    .note{font-size:.95rem; color:#d7defc; background:#0f1633; padding:10px 12px; border-left:4px solid var(--accent); border-radius:10px}
+    .warn{border-left-color: var(--warn);} .ok{border-left-color: var(--ok);} .danger{border-left-color: var(--danger)}
+    details{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:12px 14px}
+    details[open]{outline:2px solid rgba(122,162,255,.35)}
+    summary{cursor:pointer; font-weight:600}
+    summary::marker{color:var(--muted)}
+    table{width:100%; border-collapse:collapse; font-size:.95rem}
+    th,td{padding:10px 8px; border-bottom:1px solid rgba(255,255,255,.08)}
+    th{text-align:left; color:#b9c6ff}
+    code,kbd{background:#0e1430; border:1px solid rgba(255,255,255,.12); padding:2px 6px; border-radius:8px}
+    footer{margin:40px 0 60px; color:#c1c8ff80; font-size:.9rem}
+    @media (max-width: 980px){ .hero .grid{grid-template-columns:1fr} .grid-2,.grid-3{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand" aria-label="Guía Doble Arranque Windows 10">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Doble Arranque Windows 10</span>
+        <span class="chip">2 discos</span>
+      </div>
+      <nav class="actions" aria-label="Acciones rápidas">
+        <button id="btn-imprimir" title="Imprimir/Guardar en PDF">Imprimir</button>
+        <button id="btn-colapsar" title="Expandir/Colapsar">Expandir todo</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="grid">
+        <div class="card pad">
+          <h1>Arranque dual en un mismo equipo con 2 discos y 2 Windows 10</h1>
+          <p>Instala Windows 10 en <strong>dos discos físicos distintos</strong> y elige sistema al iniciar mediante <strong>Windows Boot Manager</strong> o el <strong>menú de arranque UEFI/BIOS</strong>. Guía paso a paso con BCD, GPT/MBR y solución de errores.</p>
+        </div>
+        <div class="card pad">
+          <strong>Checklist rápido</strong>
+          <div style="margin-top:8px; display:grid; gap:10px">
+            <label class="check"><input type="checkbox"> Copia de seguridad de ambos discos</label>
+            <label class="check"><input type="checkbox"> 2 discos funcionales (SSD/HDD), preferible GPT/UEFI</label>
+            <label class="check"><input type="checkbox"> 2 licencias válidas (una por instalación)</label>
+            <label class="check"><input type="checkbox"> USB de instalación de Windows 10 (8–16 GB)</label>
+            <label class="check"><input type="checkbox"> Conocer teclas de Boot Menu (F12/F11/ESC)</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Escenarios y recomendaciones</h2>
+      <div class="card pad">
+        <table aria-label="Escenarios de doble arranque">
+          <thead>
+            <tr><th>Escenario</th><th>Ventajas</th><th>Cómo elegir el sistema</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>A) Boot Manager único (recomendado)</strong> — Instalas el 2º Windows con ambos discos conectados.</td>
+              <td>Menú automático al arrancar, fácil de renombrar/ordenar, restauración simple del BCD.</td>
+              <td>Windows Boot Manager con tiempo de espera (timeout).</td>
+            </tr>
+            <tr>
+              <td><strong>B) Sistemas aislados</strong> — Instalas cada Windows con el otro disco desconectado.</td>
+              <td>Independencia total (si un disco falla, el otro arranca). No comparten ESP/BCD.</td>
+              <td>Tecla de <em>Boot Menu</em> de la placa (<kbd>F12</kbd>, <kbd>Esc</kbd>, etc.).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">En UEFI moderno, usa <strong>GPT</strong> en ambos discos. El gestor de arranque (ESP) suele residir en el disco 0; el segundo Windows añadirá su entrada al BCD existente.</p>
+    </section>
+
+    <section>
+      <h2>Preparación</h2>
+      <div class="grid-2">
+        <div class="card pad">
+          <strong>Comprueba firmware y estilo de partición</strong>
+          <ul>
+            <li><kbd>Win</kbd>+<kbd>R</kbd> → <code>msinfo32</code> → <em>Modo de BIOS</em>: UEFI o Heredado.</li>
+            <li>En <em>Administración de discos</em>: ambos discos preferible en <strong>GPT</strong> si usas UEFI.</li>
+            <li>Si hay <em>BitLocker</em>, <strong>suspéndelo</strong> antes de tocar BCD/particiones.</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Licencias y nombres</strong>
+          <ul>
+            <li>Legalmente necesitas <strong>1 licencia por instalación</strong>.</li>
+            <li>Decide nombres: p.ej., “Windows 10 Trabajo” y “Windows 10 Juegos”.</li>
+            <li>Ten a mano el USB de instalación creado con Media Creation Tool o Rufus.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Instalación del segundo Windows (con Boot Manager único)</h2>
+      <ol>
+        <li>Conecta ambos discos y el USB de instalación. Entra al <em>Boot Menu</em> (<kbd>F12/F11/Esc</kbd>) y arranca desde el USB (UEFI).</li>
+        <li>En el instalador: idioma → <strong>Instalar ahora</strong> → omite o introduce clave → elige <strong>Windows 10 Pro</strong>.</li>
+        <li>Selecciona <strong>Personalizada</strong>. En la lista de discos, identifica el <strong>disco 2</strong> por tamaño/modelo.</li>
+        <li>Crea/elige una partición en el disco 2 (recomendado vacío). <strong>No borres</strong> particiones del disco 1.</li>
+        <li>Continúa. El instalador copiará archivos y, al detectar otro Windows, añadirá una entrada al <strong>Windows Boot Manager</strong>.</li>
+        <li>Tras el primer reinicio, no arranques de nuevo desde el USB. Completa OOBE (cuentas, red, privacidad).</li>
+      </ol>
+      <p class="note ok">Si el disco 2 no aparece: revisa modo <em>AHCI</em> en BIOS/UEFI y puertos NVMe/RAID. Actualiza BIOS si es muy antigua.</p>
+    </section>
+
+    <section>
+      <h2>Instalación con sistemas aislados (opcional)</h2>
+      <details>
+        <summary>Instalar aislado y elegir por tecla de arranque</summary>
+        <ol>
+          <li>Apaga el equipo y <strong>desconecta físicamente</strong> el disco 1.</li>
+          <li>Instala Windows 10 en el disco 2 con el USB (creará su propia ESP/BCD).</li>
+          <li>Apaga, reconecta el disco 1. Ahora cada disco arranca solo; elige al encender con <kbd>F12</kbd>/<kbd>Esc</kbd>.</li>
+        </ol>
+        <p class="note">Ideal para aislar entornos o pruebas. Inconveniente: no hay menú unificado.</p>
+      </details>
+    </section>
+
+    <section>
+      <h2>Configurar el menú de arranque (BCD)</h2>
+      <div class="grid-2">
+        <div class="card pad">
+          <strong>Desde interfaz gráfica</strong>
+          <ol>
+            <li><em>Configuración &gt; Sistema &gt; Acerca de &gt; Configuración avanzada del sistema</em> → <em>Inicio y recuperación</em> → <strong>Configuración</strong>.</li>
+            <li>Elige el sistema predeterminado y el <strong>tiempo de espera</strong> (p.ej., 5–10 s).</li>
+            <li>En <code>msconfig</code> → pestaña <strong>Arranque</strong>: renombra entradas y ajusta tiempo.</li>
+          </ol>
+        </div>
+        <div class="card pad">
+          <strong>Consola (avanzado)</strong>
+          <pre><code>REM Ver entradas
+bcdedit /enum
+
+REM Mostrar menú y tiempo
+bcdedit /set {bootmgr} displaybootmenu yes
+bcdedit /timeout 8
+
+REM Renombrar la entrada actual
+bcdedit /set {current} description "Windows 10 Trabajo"
+
+REM Si falta la entrada del 2º Windows, puedes añadirla:
+REM Sustituye {GUID} por el que devuelve /copy y E: por la partición del 2º Windows
+bcdedit /copy {current} /d "Windows 10 Juegos"  
+REM Copia devuelve un GUID, úsalo en:
+bcdedit /set {GUID} device partition=E:
+bcdedit /set {GUID} osdevice partition=E:
+bcdedit /set {GUID} path \Windows\System32\winload.efi
+bcdedit /set {GUID} systemroot \Windows</code></pre>
+          <p class="note">En BIOS heredada usa <code>winload.exe</code> en lugar de <code>winload.efi</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>UEFI/BIOS: orden de arranque y teclas útiles</h2>
+      <ul>
+        <li>Entra en BIOS/UEFI (<kbd>Del</kbd>/<kbd>F2</kbd>) y pon <strong>Windows Boot Manager</strong> como primera opción.</li>
+        <li>Menú de arranque rápido: <kbd>F12</kbd> (Dell/Lenovo/Acer), <kbd>Esc</kbd>→<kbd>F9</kbd> (HP), <kbd>F11</kbd> (MSI), <kbd>F8</kbd>/<kbd>F12</kbd> (ASUS, según modelo).</li>
+        <li>Desactiva temporalmente <em>Fast Boot</em> si no ves dispositivos.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Mantenimiento y buenas prácticas</h2>
+      <div class="grid-2">
+        <div class="card pad">
+          <strong>Separación y datos</strong>
+          <ul>
+            <li>Guarda datos en una 3ª partición o disco para acceder desde ambos sistemas.</li>
+            <li>Evita hibernación cruzada (no montar NTFS de un Windows que está hibernado).</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Imágenes y recuperación</strong>
+          <ul>
+            <li>Crea imagen del sistema de cada instalación tras dejarla a punto.</li>
+            <li>Guarda un USB de recuperación. Anota las letras de unidad de cada Windows.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Solución de problemas</h2>
+      <details>
+        <summary>Arranca directo a un Windows y no aparece el menú</summary>
+        <ul>
+          <li>Entra a <code>msconfig</code> → pestaña <strong>Arranque</strong> y verifica entradas.</li>
+          <li>Fuerza el menú: <code>bcdedit /set {bootmgr} displaybootmenu yes</code> y <code>bcdedit /timeout 8</code>.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>El segundo Windows no figura en el BCD</summary>
+        <ul>
+          <li>Desde el Windows que sí arranca, identifica la letra del otro (p.ej., E:).</li>
+          <li>Reconstruye con <strong>bcdboot</strong>:
+            <pre><code>bcdboot E:\Windows /addlast /d /f UEFI</code></pre>
+            En BIOS heredada: <code>/f BIOS</code> o <code>/f ALL</code>.
+          </li>
+        </ul>
+      </details>
+      <details>
+        <summary>BCD/MBR dañado, no arranca ninguno</summary>
+        <ul>
+          <li>Arranca desde el USB → <em>Reparar el equipo</em> → <em>Solucionar problemas</em> → <em>CMD</em>.</li>
+          <li>Comandos útiles:
+            <pre><code>bootrec /fixmbr
+bootrec /fixboot  (si da acceso denegado, usa: bootsect /nt60 sys)
+bootrec /scanos
+bootrec /rebuildbcd</code></pre>
+            Si sigue fallando, vuelve a inyectar cargador:
+            <pre><code>bcdboot C:\Windows /l es-es /s S: /f UEFI</code></pre>
+            (C: es el Windows objetivo; S: es la partición EFI)
+          </li>
+        </ul>
+      </details>
+      <details>
+        <summary>Conflictos con BitLocker o RAID/Intel RST</summary>
+        <ul>
+          <li>Suspende BitLocker antes de tocar BCD y reanúdalo después.</li>
+          <li>Si usas RAID/RST, instala los controladores durante la instalación o cambia a AHCI (requiere preparación previa).</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Fechas y horas desincronizadas entre sistemas</summary>
+        <ul>
+          <li>Usa la misma zona horaria y sincronización NTP. Evita cambiar manualmente la hora en uno solo.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Atajos y utilidades</h2>
+      <ul>
+        <li><kbd>Win</kbd>+<kbd>X</kbd> → <em>Administración de discos</em>.</li>
+        <li><kbd>Shift</kbd>+<kbd>Reiniciar</kbd> → opciones avanzadas de arranque.</li>
+        <li><code>diskpart</code>: <code>list disk</code>, <code>list vol</code>, <code>sel disk X</code>, <code>convert gpt</code>/<code>mbr</code>.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Guía práctica para doble arranque con Windows 10 en dos discos. Puedes imprimir o guardar en PDF con el botón superior.
+    </footer>
+  </main>
+
+  <script>
+    // Imprimir/Guardar PDF
+    document.getElementById('btn-imprimir').addEventListener('click', () => window.print());
+    // Expandir/Colapsar todos los <details>
+    const btn = document.getElementById('btn-colapsar');
+    let expanded = false;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('details').forEach(d => d.open = !expanded);
+      expanded = !expanded;
+      btn.textContent = expanded ? 'Colapsar todo' : 'Expandir todo';
+    });
+  </script>
+</body>
+</html>
