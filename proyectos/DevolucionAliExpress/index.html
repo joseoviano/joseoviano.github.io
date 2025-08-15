@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Devoluciones en AliExpress — Guía paso a paso (2025)</title>
+  <meta name="description" content="Guía clara y responsive para devolver productos en AliExpress en 2025: pasos, plazos, consejos y FAQ." />
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="Devoluciones en AliExpress — Guía paso a paso (2025)" />
+  <meta property="og:description" content="Pasos, plazos y consejos prácticos para gestionar devoluciones y disputas en AliExpress." />
+  <meta property="og:type" content="website" />
+  <meta name="robots" content="index,follow" />
+  <style>
+    :root{
+      --bg: #0b0c0f;
+      --card:#11131a;
+      --text:#e7e9ee;
+      --muted:#9aa3b2;
+      --accent:#7dd3fc;
+      --ok:#22c55e;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --border:#1f2430;
+      --link:#60a5fa;
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f8fafc;
+        --card:#ffffff;
+        --text:#0f172a;
+        --muted:#475569;
+        --accent:#0891b2;
+        --ok:#16a34a;
+        --warn:#d97706;
+        --bad:#dc2626;
+        --border:#e2e8f0;
+        --link:#2563eb;
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    a{color:var(--link);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{max-width:1000px;margin:0 auto;padding:20px}
+    header{
+      position:sticky;top:0;z-index:10;background:linear-gradient(to bottom, var(--bg), color-mix(in oklab, var(--bg) 80%, transparent));
+      border-bottom:1px solid var(--border);
+      backdrop-filter: blur(6px);
+    }
+    .nav{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:12px 20px}
+    .brand{font-weight:700;letter-spacing:.2px}
+    .actions{display:flex;gap:10px;align-items:center}
+    button, .chip{
+      border:1px solid var(--border);background:var(--card);color:var(--text);
+      padding:8px 12px;border-radius:12px;cursor:pointer;font-weight:600
+    }
+    main{padding:28px 20px}
+    .hero{
+      background: radial-gradient(1200px 300px at 50% -50%, color-mix(in oklab, var(--accent) 20%, transparent), transparent);
+      padding:32px;border:1px solid var(--border);border-radius:20px;background-color:var(--card);
+      display:grid;gap:16px
+    }
+    .grid{display:grid;gap:16px}
+    @media(min-width:840px){.grid-2{grid-template-columns:1.3fr .7fr}}
+    h1{font-size:clamp(1.6rem,2.5vw,2.2rem);margin:0 0 10px}
+    h2{font-size:1.2rem;margin:18px 0 8px}
+    .muted{color:var(--muted)}
+    .card{border:1px solid var(--border);border-radius:16px;background:var(--card);padding:16px}
+    .step{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:12px;border:1px dashed var(--border);border-radius:12px;background:color-mix(in oklab,var(--card) 85%,transparent)}
+    .badge{display:inline-flex;align-items:center;gap:6px;font-weight:700}
+    .badge.ok{color:var(--ok)} .badge.warn{color:var(--warn)} .badge.bad{color:var(--bad)}
+    .timeline{position:relative;padding-left:18px}
+    .timeline::before{content:"";position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
+    .titem{position:relative;padding-left:14px;margin:8px 0}
+    .titem::before{content:"";position:absolute;left:-1px;top:.5em;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in oklab,var(--accent) 20%, transparent)}
+    .kbd{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;background:color-mix(in oklab,var(--card) 85%, transparent);border:1px solid var(--border);padding:2px 6px;border-radius:6px}
+    details{border:1px solid var(--border);border-radius:12px;padding:12px;background:var(--card)}
+    details>summary{cursor:pointer;font-weight:700;list-style:none}
+    details>summary::-webkit-details-marker{display:none}
+    .toc{display:flex;flex-wrap:wrap;gap:8px}
+    .toc a{border:1px solid var(--border);padding:6px 10px;border-radius:10px;background:var(--card)}
+    footer{margin:30px 0;color:var(--muted);text-align:center}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border);border-radius:999px;padding:6px 10px;background:var(--card)}
+    .grid-3{display:grid;gap:12px}
+    @media(min-width:800px){.grid-3{grid-template-columns:repeat(3,1fr)}}
+    .callout{border-left:4px solid var(--accent);padding:10px 12px;background:color-mix(in oklab,var(--card) 85%, transparent);border-radius:8px}
+    .small{font-size:.92rem}
+    .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--card);font-weight:700}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  </style>
+  <script>
+    // Light/Dark manual toggle (respects prefers-color-scheme by default)
+    function toggleScheme(){
+      const current = document.documentElement.dataset.scheme;
+      document.documentElement.dataset.scheme = current === 'light' ? 'dark' : 'light';
+    }
+    // Persist toggle
+    (function(){
+      const saved = localStorage.getItem('scheme');
+      if(saved){ document.documentElement.dataset.scheme = saved; }
+      document.addEventListener('click', (e)=>{
+        if(e.target.matches('#toogleTheme')){
+          const val = document.documentElement.dataset.scheme === 'light' ? 'dark' : 'light';
+          document.documentElement.dataset.scheme = val;
+          localStorage.setItem('scheme', val);
+        }
+      });
+    })();
+  </script>
+</head>
+<body>
+  <header>
+    <nav class="nav container">
+      <div class="brand">AliExpress · Devoluciones 2025</div>
+      <div class="actions">
+        <a class="chip small" href="#pasos">Pasos</a>
+        <a class="chip small" href="#plazos">Plazos</a>
+        <a class="chip small" href="#faq">FAQ</a>
+        <button id="toogleTheme" title="Alternar tema">🌗</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero grid grid-2">
+      <div>
+        <h1>Cómo devolver un producto en AliExpress</h1>
+        <p class="muted">Guía rápida y práctica. Válida aunque ya hayas marcado el pedido como <em>recibido</em>, siempre que sigas dentro del plazo.</p>
+        <div class="toc" aria-label="Índice de secciones">
+          <a href="#resumen">Resumen</a>
+          <a href="#pasos">Pasos detallados</a>
+          <a href="#plazos">Plazos y estados</a>
+          <a href="#consejos">Consejos</a>
+          <a href="#faq">FAQ</a>
+          <a href="#github">Subir a GitHub Pages</a>
+        </div>
+      </div>
+      <aside class="card">
+        <h2>Checklist rápido</h2>
+        <div class="grid-3">
+          <div class="step"><span class="num">1</span><div>Comprueba que estás <strong>dentro de los 15 días</strong> posteriores a la recepción.</div></div>
+          <div class="step"><span class="num">2</span><div>Reúne <strong>evidencias</strong>: fotos, vídeo, captura del pedido y del problema.</div></div>
+          <div class="step"><span class="num">3</span><div>Ve a <span class="kbd">Mis pedidos → Abrir disputa</span>.</div></div>
+        </div>
+        <p class="callout small"><strong>Tip:</strong> Si el producto tenía etiqueta <em>“Free Return”</em>, pide la <strong>etiqueta prepagada</strong> antes de enviar nada.</p>
+      </aside>
+    </section>
+
+    <section id="resumen" class="card">
+      <h2>Resumen</h2>
+      <p>Abre disputa desde <span class="kbd">Mis pedidos</span>, elige <strong>reembolso</strong> (parcial o total) con o sin <em>devolución física</em>, aporta pruebas y sigue las instrucciones. Si no hay acuerdo, <strong>escala</strong> para que AliExpress medie.</p>
+      <div class="grid-3">
+        <div class="pill"><span class="badge ok">✔</span> Aún vale si marcaste “recibido”</div>
+        <div class="pill"><span class="badge warn">⏱</span> Límite: 15 días desde la entrega</div>
+        <div class="pill"><span class="badge ok">🧾</span> Guarda número de seguimiento</div>
+      </div>
+    </section>
+
+    <section id="pasos" class="card">
+      <h2>Pasos detallados</h2>
+      <ol class="grid">
+        <li class="step"><span class="num">1</span>
+          <div><strong>Contacta al vendedor</strong> (opcional pero recomendado) desde el pedido. Expón el problema y adjunta evidencias.</div>
+        </li>
+        <li class="step"><span class="num">2</span>
+          <div><strong>Abrir disputa:</strong> <span class="kbd">Mis pedidos → Pedido → Abrir disputa</span>. Selecciona “Reembolso total” o “Reembolso parcial”.</div>
+        </li>
+        <li class="step"><span class="num">3</span>
+          <div><strong>Describe el motivo</strong> con claridad (defectuoso, no coincide, incompleto, etc.) y sube fotos/vídeos. Cuanto más objetivo, mejor.</div>
+        </li>
+        <li class="step"><span class="num">4</span>
+          <div><strong>¿Free Return?</strong> Si el anuncio incluía <em>Free Return</em>, solicita <strong>etiqueta de devolución</strong> y punto de entrega autorizado.</div>
+        </li>
+        <li class="step"><span class="num">5</span>
+          <div><strong>Envío (si procede):</strong> No envíes sin instrucciones claras. Usa la etiqueta facilitada o acuerda quién paga el envío.</div>
+        </li>
+        <li class="step"><span class="num">6</span>
+          <div><strong>Negociación / Mediación:</strong> El vendedor puede responder con una propuesta. Si no hay acuerdo, <strong>escala</strong> para que AliExpress decida.</div>
+        </li>
+        <li class="step"><span class="num">7</span>
+          <div><strong>Reembolso:</strong> Tras aprobarse (o tras recibir el artículo devuelto), el reembolso llega al método de pago en unos días hábiles.</div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="plazos" class="card">
+      <h2>Plazos y estados</h2>
+      <div class="timeline">
+        <div class="titem"><strong>Apertura de disputa:</strong> dentro de <strong>15 días</strong> posteriores a marcar recibido / entrega.</div>
+        <div class="titem"><strong>Respuesta del vendedor:</strong> habitualmente hasta <strong>5 días</strong>.</div>
+        <div class="titem"><strong>Mediación de AliExpress:</strong> variable; aportan veredicto según evidencias.</div>
+        <div class="titem"><strong>Reembolso:</strong> procesado tras acuerdo o recepción del artículo; depende del banco/emisor.</div>
+      </div>
+      <p class="muted small">Nota: los plazos pueden variar por país, método de pago y condiciones del vendedor.</p>
+    </section>
+
+    <section id="consejos" class="card">
+      <h2>Consejos para que salga bien</h2>
+      <ul>
+        <li><strong>No envíes</strong> el artículo sin etiqueta o autorización si esperas reembolso de gastos.</li>
+        <li>Usa fotos nítidas, vídeos cortos y captura del número de pedido.</li>
+        <li>Describe el fallo con datos: fechas, cómo se reproduce, y comparativas si aplica.</li>
+        <li>Si el vendedor no responde o propone algo injusto, <strong>escala</strong> la disputa.</li>
+      </ul>
+    </section>
+
+    <section id="faq" class="card">
+      <h2>FAQ</h2>
+      <details>
+        <summary>¿Puedo abrir disputa si ya confirmé “pedido recibido”?</summary>
+        <p>Sí, mientras estés dentro de los <strong>15 días</strong> posteriores a la recepción.</p>
+      </details>
+      <details>
+        <summary>¿Qué es “Free Return”?</summary>
+        <p>Una etiqueta que ofrece devolución gratuita en ciertos países/productos. Comprueba si tu artículo la tenía en la ficha del pedido.</p>
+      </details>
+      <details>
+        <summary>¿Cuánto tarda el reembolso?</summary>
+        <p>Tras aprobarse, puede tardar varios días hábiles dependiendo del método de pago y tu banco.</p>
+      </details>
+      <details>
+        <summary>¿Y si el vendedor no responde?</summary>
+        <p>Escala la disputa para que AliExpress medie y decida según las evidencias.</p>
+      </details>
+    </section>
+
+    <section id="github" class="card">
+      <h2>Cómo subir esta página a GitHub Pages</h2>
+      <ol>
+        <li>Crea un repositorio público llamado, por ejemplo, <strong>aliexpress-devoluciones</strong>.</li>
+        <li>Sube este archivo como <span class="kbd">index.html</span> (raíz del repo).</li>
+        <li>En <span class="kbd">Settings → Pages</span>, en <em>Build and deployment</em>, selecciona <strong>Deploy from a branch</strong> y elige <span class="kbd">main / (root)</span>.</li>
+        <li>Guarda y espera a que se genere la URL de GitHub Pages.</li>
+      </ol>
+      <p class="muted small">Tip: para actualizar, sube una nueva versión de <span class="kbd">index.html</span> y GitHub Pages redeplegará automáticamente.</p>
+    </section>
+
+    <footer>
+      <p>© 2025 · Guía no oficial. Revisa siempre los términos actuales de AliExpress.</p>
+    </footer>
+  </main>
+</body>
+</html>
