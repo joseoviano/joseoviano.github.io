@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Instalación de Windows 10 Pro desde USB (Guía Completa)</title>
+  <meta name="description" content="Guía paso a paso para crear un USB de arranque y realizar la instalación limpia de Windows 10 Pro. Incluye requisitos, creación del medio, BIOS/UEFI y solución de errores." />
+  <style>
+    :root{
+      --bg: #0b1020;
+      --card: #111834;
+      --muted: #9fb0ff;
+      --text: #e9ecff;
+      --accent: #7aa2ff;
+      --accent-2: #00d4ff;
+      --ok: #38d39f;
+      --warn: #ffd166;
+      --danger: #ff6b6b;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background: radial-gradient(1200px 800px at 10% -10%, #16255f 0%, var(--bg) 60%);
+      color:var(--text); font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    a{color:var(--accent)}
+    .container{width:min(1200px, 100% - 32px); margin-inline:auto}
+
+    header{
+      position:sticky; top:0; z-index:50; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(2,8,23,.8), rgba(2,8,23,.4));
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .nav{display:flex; align-items:center; gap:16px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700}
+    .brand .logo{width:32px; height:32px; border-radius:10px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: var(--shadow)}
+    .chip{font-size:.85rem; color:#0b1020; background:var(--muted); padding:2px 8px; border-radius:999px}
+    .actions{margin-left:auto; display:flex; gap:8px}
+    button{cursor:pointer; border:0; border-radius:12px; padding:10px 14px; background:#1a2552; color:var(--text); box-shadow:var(--shadow)}
+    button:hover{filter:brightness(1.1)}
+
+    .hero{display:grid; gap:24px; padding:32px 0 24px}
+    .hero h1{font-size: clamp(1.6rem, 1.2rem + 2.2vw, 2.6rem); line-height:1.2; margin:0}
+    .hero p{margin:0; color:#cbd5ff}
+    .hero .grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius); box-shadow:var(--shadow)}
+    .card.pad{padding:18px}
+
+    .checklist{display:grid; gap:10px}
+    .check{display:flex; gap:10px; align-items:flex-start; background:#0f1633; padding:10px 12px; border-radius:12px; border:1px dashed rgba(255,255,255,.12)}
+    .check input{margin-top:4px}
+
+    .grid-2{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:16px}
+    .grid-3{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:16px}
+
+    section{margin:28px 0}
+    section h2{font-size: clamp(1.25rem, 1rem + 1vw, 1.8rem); margin:0 0 12px}
+    .note{font-size:.95rem; color:#d7defc; background:#0f1633; padding:10px 12px; border-left:4px solid var(--accent); border-radius:10px}
+    .warn{border-left-color: var(--warn);}
+    .ok{border-left-color: var(--ok);}
+
+    details{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:12px 14px}
+    details[open]{outline: 2px solid rgba(122,162,255,.35)}
+    summary{cursor:pointer; font-weight:600}
+    summary::marker{color:var(--muted)}
+
+    table{width:100%; border-collapse:collapse; font-size:.95rem}
+    th,td{padding:10px 8px; border-bottom:1px solid rgba(255,255,255,.08)}
+    th{text-align:left; color:#b9c6ff}
+    code,kbd{background:#0e1430; border:1px solid rgba(255,255,255,.12); padding:2px 6px; border-radius:8px}
+
+    footer{margin:40px 0 60px; color:#c1c8ff80; font-size:.9rem}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero .grid{grid-template-columns:1fr}
+      .grid-2{grid-template-columns:1fr}
+      .grid-3{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand" aria-label="Guía Windows 10 Pro">
+        <div class="logo" aria-hidden="true"></div>
+        <span>Guía Windows 10 Pro</span>
+        <span class="chip">USB Boot</span>
+      </div>
+      <nav class="actions" aria-label="Acciones rápidas">
+        <button id="btn-imprimir" title="Imprimir/Guardar en PDF">Imprimir</button>
+        <button id="btn-colapsar" title="Expandir/Colapsar todo">Expandir todo</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="grid">
+        <div class="card pad">
+          <h1>Instalar Windows 10 Pro desde un USB</h1>
+          <p>Guía práctica y directa: prepara un <strong>USB de arranque</strong>, configura <strong>BIOS/UEFI</strong> y realiza una <strong>instalación limpia</strong> sin sorpresas. Incluye tabla de configuración (MBR/GPT), resolución de errores y pasos posteriores.</p>
+        </div>
+        <div class="card pad">
+          <div class="checklist" aria-label="Lista rápida de verificación">
+            <label class="check"><input type="checkbox"> Copia de seguridad de archivos importantes</label>
+            <label class="check"><input type="checkbox"> USB 8–16 GB (vacío)</label>
+            <label class="check"><input type="checkbox"> Clave válida de Windows 10/11 Pro (opcional en instalación)</label>
+            <label class="check"><input type="checkbox"> Conocer si tu equipo usa UEFI o BIOS heredada</label>
+            <label class="check"><input type="checkbox"> Alimentación conectada (portátiles)</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Requisitos</h2>
+      <div class="grid-3">
+        <div class="card pad">
+          <strong>Hardware mínimo</strong>
+          <ul>
+            <li>CPU 1 GHz o más rápida (x64 recomendado)</li>
+            <li>RAM: 4 GB (8 GB recomendado)</li>
+            <li>Almacenamiento: ≥ 32 GB (recomendado ≥ 128 GB SSD)</li>
+            <li>UEFI o BIOS, soporte de arranque por USB</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Medios</strong>
+          <ul>
+            <li>USB 8 GB mínimo (16 GB mejor)</li>
+            <li>Imagen ISO de Windows 10 o <em>Media Creation Tool</em></li>
+            <li>Utilidad alternativa: Rufus</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Licencia</strong>
+          <ul>
+            <li>Clave de producto de Windows 10/11 Pro (25 caracteres)</li>
+            <li>Puedes omitirla y activar más tarde</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">Si vas a reutilizar un SSD/HDD, haz copia de seguridad. La instalación limpia puede <strong>borrar todas las particiones</strong>.</p>
+    </section>
+
+    <section>
+      <h2>Crear el USB de arranque</h2>
+      <details open>
+        <summary>Opción A — Herramienta oficial: Media Creation Tool (rápida y segura)</summary>
+        <ol>
+          <li>En un PC con Windows, descarga <em>Media Creation Tool</em> para Windows 10 desde la web oficial de Microsoft.</li>
+          <li>Conecta el USB (se borrará). Ejecuta la herramienta como administrador.</li>
+          <li>Acepta licencia → <strong>Crear medios de instalación</strong> → Idioma y arquitectura (elige 64 bits).</li>
+          <li>Selecciona <strong>Unidad flash USB</strong> → elige tu pendrive → Iniciar. La herramienta descargará y preparará el USB automáticamente.</li>
+          <li>Al finalizar, expulsa el USB de forma segura.</li>
+        </ol>
+        <p class="note ok">Ventajas: gestiona particiones/UEFI automáticamente, descarga oficial, menos errores de arranque.</p>
+      </details>
+
+      <details>
+        <summary>Opción B — Rufus + ISO (más control, GPT/MBR a medida)</summary>
+        <ol>
+          <li>Descarga la ISO de Windows 10 (o usa opción “Descargar” de Rufus).</li>
+          <li>Abre Rufus → <strong>Dispositivo</strong>: tu USB.</li>
+          <li><strong>Seleccionar</strong>: elige la ISO.</li>
+          <li>Configura según tu firmware:
+            <div class="card pad" style="margin-top:10px">
+              <table aria-label="Tabla de configuración Rufus">
+                <thead>
+                  <tr><th>Tu equipo</th><th>Esquema de partición</th><th>Destino/Objetivo</th><th>Sistema de archivos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>UEFI moderno (recomendado)</td><td><strong>GPT</strong></td><td>UEFI (no CSM)</td><td>NTFS o FAT32*</td></tr>
+                  <tr><td>BIOS heredada / UEFI con CSM</td><td><strong>MBR</strong></td><td>BIOS o UEFI-CSM</td><td>NTFS</td></tr>
+                </tbody>
+              </table>
+              <p style="margin-top:8px; font-size:.92rem">*Si el archivo <code>install.wim</code> supera 4 GB, FAT32 no lo admite. Rufus usa NTFS con <em>UEFI:NTFS</em> para seguir arrancando en UEFI.</p>
+            </div>
+          </li>
+          <li>Etiqueta de volumen opcional → pulsa <strong>Empezar</strong>. Acepta el formateo.</li>
+          <li>Al terminar, expulsa el USB de forma segura.</li>
+        </ol>
+      </details>
+
+      <details>
+        <summary>Cómo saber si mi equipo usa UEFI o BIOS</summary>
+        <ul>
+          <li>Windows actual: <kbd>Win</kbd>+<kbd>R</kbd> → <code>msinfo32</code> → <strong>Modo de BIOS</strong>: UEFI o Heredado.</li>
+          <li>En UEFI, puedes tener <em>Secure Boot</em> activado. No es obligatorio desactivarlo para Windows 10.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Configurar BIOS/UEFI para arrancar desde USB</h2>
+      <ol>
+        <li>Con el equipo apagado, conecta el USB.</li>
+        <li>Enciende y pulsa repetidamente la tecla de arranque/BIOS: suele ser <kbd>F12</kbd>, <kbd>F8</kbd>, <kbd>F11</kbd> (menú de arranque) o <kbd>Del</kbd>/<kbd>Supr</kbd>, <kbd>F2</kbd> (BIOS).</li>
+        <li>En el <strong>Boot Menu</strong>, elige tu USB. Si no aparece:
+          <ul>
+            <li>En BIOS/UEFI → pestaña <em>Boot</em>: mueve el USB a la primera posición.</li>
+            <li>En UEFI: comprueba que el modo coincide con cómo creaste el USB (UEFI vs CSM).</li>
+            <li>Desactiva temporalmente <em>Fast Boot</em> si oculta dispositivos.</li>
+          </ul>
+        </li>
+      </ol>
+      <p class="note">En muchos portátiles: <kbd>F12</kbd> (Dell/Lenovo), <kbd>Esc</kbd>→<kbd>F9</kbd> (HP), <kbd>F8/F12</kbd> (Acer), <kbd>F2</kbd> BIOS en ASUS/MSI.</p>
+    </section>
+
+    <section>
+      <h2>Instalación de Windows 10 Pro (limpia)</h2>
+      <ol>
+        <li>Arranca desde el USB. En el instalador, elige idioma, formato de hora y teclado → <strong>Siguiente</strong> → <strong>Instalar ahora</strong>.</li>
+        <li>Introduce la <strong>clave de producto</strong> o pulsa <em>No tengo clave</em>. Selecciona <strong>Windows 10 Pro</strong>.</li>
+        <li>Acepta licencia → <strong>Personalizada: instalar solo Windows (avanzado)</strong>.</li>
+        <li>En <strong>¿Dónde quieres instalar Windows?</strong>:
+          <ul>
+            <li>Para instalación limpia: elimina las particiones del disco de destino (cuidado) hasta que quede <em>Espacio sin asignar</em>.</li>
+            <li>Selecciona el espacio sin asignar y pulsa <strong>Siguiente</strong>. El asistente creará particiones necesarias (MSR/EFI).</li>
+            <li>Si instalas junto a otro SO, elige una partición con tamaño suficiente y pulsa <strong>Formatear</strong>.</li>
+          </ul>
+        </li>
+        <li>Espera la copia de archivos y reinicios. No pulses ninguna tecla cuando reinicie.</li>
+        <li>Configura la experiencia inicial (región, teclado, red, cuenta, privacidad). Puedes crear cuenta local si lo prefieres.</li>
+      </ol>
+      <p class="note ok">Consejo: si usas SSD NVMe y el disco no aparece, entra en BIOS y pon modo <em>AHCI</em> y actualiza BIOS si es muy antigua.</p>
+    </section>
+
+    <section>
+      <h2>Después de instalar</h2>
+      <div class="grid-2">
+        <div class="card pad">
+          <strong>Drivers y Windows Update</strong>
+          <ul>
+            <li>Conéctate a Internet → <em>Configuración &gt; Windows Update</em> (instala todo).</li>
+            <li>Descarga controladores del fabricante (chipset, vídeo, audio, Wi‑Fi). Reinicia.</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Activación</strong>
+          <ul>
+            <li><em>Configuración &gt; Actualización y seguridad &gt; Activación</em>.</li>
+            <li>Si tu placa tenía licencia digital, se activará automáticamente al conectarte.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:12px">
+        <div class="card pad">
+          <strong>Privacidad y rendimiento</strong>
+          <ul>
+            <li>Desactiva lo que no uses en <em>Privacidad</em>.</li>
+            <li>Habilita <em>Restaurar sistema</em> y crea un punto de restauración.</li>
+            <li>Opcional: crea imagen del sistema con <em>Recuperación</em> o herramienta de terceros.</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Software básico</strong>
+          <ul>
+            <li>Navegador, gestor de archivos comprimidos, visor PDF, suite ofimática.</li>
+            <li>Habilita <em>Protección contra ransomware</em> en Seguridad de Windows.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Errores comunes y solución</h2>
+      <details>
+        <summary>El USB no arranca o no aparece en el menú</summary>
+        <ul>
+          <li>Recrea el USB con el esquema correcto (GPT/UEFI o MBR/BIOS).</li>
+          <li>Usa otro puerto USB (mejor 2.0 en equipos antiguos).</li>
+          <li>Desactiva <em>Fast Boot</em> y habilita <em>USB boot</em> en BIOS.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>“No se pudo crear una partición nueva” / “No se puede instalar en este disco”</summary>
+        <ul>
+          <li>Si tu firmware es UEFI, el disco debe estar en <strong>GPT</strong>. En la pantalla de particiones, usa <em>Shift+F10</em> → <code>diskpart</code> → <code>list disk</code> → <code>select disk X</code> → <code>clean</code> → <code>convert gpt</code> (borra todo).</li>
+          <li>Para BIOS heredada, usa <strong>MBR</strong>: <code>convert mbr</code>.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Falta un controlador de medios</summary>
+        <ul>
+          <li>Conecta el USB a un puerto 2.0 (controladores 3.x viejos dan problemas).</li>
+          <li>Vuelve a crear el USB; evita hubs/cables defectuosos.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Bucle de reinicio tras copiar archivos</summary>
+        <ul>
+          <li>Al primer reinicio, <strong>no</strong> arranques de nuevo desde el USB. Quita prioridad o retíralo.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Clave de producto rechazada</summary>
+        <ul>
+          <li>Completa la instalación sin clave y activa más tarde con <em>Cambiar la clave</em>.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section>
+      <h2>Atajos útiles</h2>
+      <ul>
+        <li><kbd>Shift</kbd>+<kbd>F10</kbd> abre consola (DiskPart) durante la instalación.</li>
+        <li><kbd>Alt</kbd>+<kbd>F4</kbd> cierra ventanas emergentes del instalador.</li>
+        <li>Captura de pantalla: <kbd>Win</kbd>+<kbd>PrtSc</kbd> (ya en sistema instalado).</li>
+      </ul>
+    </section>
+
+    <footer>
+      Hecho para una instalación rápida y sin vueltas. Puedes imprimir o guardar en PDF con el botón superior. 
+    </footer>
+  </main>
+
+  <script>
+    // Imprimir/Guardar PDF
+    document.getElementById('btn-imprimir').addEventListener('click', () => window.print());
+
+    // Expandir/Colapsar todos los <details>
+    const btn = document.getElementById('btn-colapsar');
+    let expanded = false;
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('details').forEach(d => d.open = !expanded);
+      expanded = !expanded;
+      btn.textContent = expanded ? 'Colapsar todo' : 'Expandir todo';
+    });
+  </script>
+</body>
+</html>
