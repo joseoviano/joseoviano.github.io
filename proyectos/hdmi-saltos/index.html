@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solución a Saltos HDMI (Mini PC Chuwi ↔ Smart TV)</title>
+  <style>
+    :root{
+      --bg:#0f1115; --fg:#e7e9ee; --muted:#9aa4b2; --card:#171a21; --accent:#6ae3ff; --ok:#35d399; --warn:#ffce6a; --bad:#ff7a7a; --border:#2a2f3a;
+      --shadow:0 8px 24px rgba(0,0,0,.35);
+    }
+    .light{ --bg:#f6f7fb; --fg:#0f1115; --muted:#4b5563; --card:#ffffff; --accent:#0ea5e9; --ok:#059669; --warn:#b45309; --bad:#b91c1c; --border:#e5e7eb; --shadow:0 10px 30px rgba(0,0,0,.08);}  
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Noto Sans",sans-serif;line-height:1.45}
+    header{position:sticky;top:0;z-index:10;background:linear-gradient(180deg, rgba(0,0,0,.25), transparent), var(--card);border-bottom:1px solid var(--border);} 
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    h1{margin:0;font-size:clamp(1.1rem,2.5vw,1.6rem)}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:10px}
+    .tag{background:var(--bg);border:1px solid var(--border);padding:8px 12px;border-radius:999px;display:inline-flex;gap:8px;align-items:center}
+    select,button,input[type="checkbox"]{accent-color:var(--accent)}
+    select,button{border:1px solid var(--border);background:var(--card);color:var(--fg);border-radius:10px;padding:10px 12px}
+    button{cursor:pointer;box-shadow:var(--shadow)}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+    .tab{border:1px solid var(--border);background:var(--card);padding:10px 14px;border-radius:10px;cursor:pointer}
+    .tab.active{outline:2px solid var(--accent)}
+    main{max-width:1100px;margin:12px auto;padding:0 18px 28px}
+    section{display:none}
+    section.active{display:block;animation:fade .2s ease}
+    @keyframes fade{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+    details{border:1px dashed var(--border);border-radius:12px;padding:12px 12px;margin:10px 0;background:rgba(255,255,255,.02)}
+    summary{cursor:pointer;font-weight:700}
+    .check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--border)}
+    .check:last-child{border-bottom:none}
+    .grid{display:grid;gap:14px}
+    @media(min-width:860px){.grid.cols-2{grid-template-columns:1fr 1fr}}
+    .hint{color:var(--muted);font-size:.95rem}
+    .ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid var(--border);font-size:.8rem;color:var(--muted)}
+    .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .sticky-tools{position:sticky;top:64px;z-index:5;margin-bottom:12px}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:2px 6px}
+    .fswrap{display:flex;gap:10px;flex-wrap:wrap}
+    .full{display:inline-flex;align-items:center;gap:8px}
+    .note{font-size:.95rem}
+    .flex{display:flex;gap:10px;align-items:center}
+    .spacer{flex:1}
+    footer{border-top:1px solid var(--border);padding:22px 18px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Guía interactiva · Arreglar <span class="pill">saltos / re-sincronización</span> HDMI entre Mini PC Chuwi y Smart TV</h1>
+      <div class="row toolbar">
+        <label class="tag">Sistema operativo: 
+          <select id="osSel">
+            <option value="w11">Windows 11</option>
+            <option value="w10">Windows 10</option>
+          </select>
+        </label>
+        <label class="tag">GPU: 
+          <select id="gpuSel">
+            <option value="amd">AMD (Radeon 660M / 6600H)</option>
+            <option value="intel">Intel</option>
+            <option value="nvidia">NVIDIA</option>
+          </select>
+        </label>
+        <span class="spacer"></span>
+        <button id="themeBtn" title="Cambiar tema">🌗 Tema</button>
+        <button id="exportBtn" title="Exportar tu plan y resultados">💾 Exportar</button>
+        <button id="resetBtn" title="Borrar progreso">🗑️ Reiniciar</button>
+      </div>
+      <nav class="nav">
+        <button class="tab active" data-tab="diag">Diagnóstico rápido</button>
+        <button class="tab" data-tab="pc">Mini PC</button>
+        <button class="tab" data-tab="tv">Smart TV</button>
+        <button class="tab" data-tab="cable">Cableado / Intermedios</button>
+        <button class="tab" data-tab="tests">Pruebas</button>
+        <button class="tab" data-tab="guides">Guías paso a paso</button>
+        <button class="tab" data-tab="faq">FAQ</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- DIAGNÓSTICO RÁPIDO -->
+    <section id="tab-diag" class="active">
+      <div class="card">
+        <p class="note">Sigue estos pasos en orden. Marca cada uno para registrar lo que ya probaste. Si los <strong>saltos</strong> siguen, ve a las pestañas específicas de <strong>Mini PC</strong> y <strong>Smart TV</strong>.</p>
+        <div class="grid cols-2" id="diagList"></div>
+      </div>
+    </section>
+
+    <!-- MINI PC -->
+    <section id="tab-pc">
+      <div class="card">
+        <h2>Mini PC Chuwi · Ajustes recomendados</h2>
+        <p class="hint">Los bloques se adaptan a <span id="osHint">Windows 11</span> y <span id="gpuHint">AMD</span>. Cambia arriba si tu caso es distinto.</p>
+
+        <details open>
+          <summary>1) Fijar resolución y frecuencia estables (evitar VRR/DRR)</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="pc_fixrefresh"/> <div>Abre <span class="kbd">Configuración → Sistema → Pantalla</span> y pon <strong>60 Hz</strong> (o 50 Hz si tu TV es europea y sólo ofrece 50 Hz estables). Desactiva <strong>HDR</strong> de forma temporal durante las pruebas.</div></div>
+            <div class="check only-w11"><input type="checkbox" data-key="pc_drr"/> <div>En <span class="kbd">Pantalla → Configuración de gráficos</span>, desactiva <strong>Frecuencia de actualización dinámica (DRR)</strong> si aparece.</div></div>
+            <div class="check only-amd"><input type="checkbox" data-key="pc_freesync_off"/> <div>En <strong>AMD Adrenalin → Pantalla</strong>, desactiva <strong>FreeSync</strong> para esa salida HDMI.</div></div>
+            <div class="check only-nvidia"><input type="checkbox" data-key="pc_gsync_off"/> <div>En <strong>Panel de control NVIDIA → Pantalla</strong>, desactiva <strong>G‑SYNC/VRR</strong> para ese monitor.</div></div>
+            <div class="check only-intel"><input type="checkbox" data-key="pc_vrr_off_intel"/> <div>En <strong>Intel Graphics Command Center → Display</strong>, desactiva <strong>VRR</strong> si está disponible.</div></div>
+          </div>
+        </details>
+
+        <details>
+          <summary>2) Formato de color y escalado</summary>
+          <div class="grid">
+            <div class="check only-amd"><input type="checkbox" data-key="pc_rgb_amd"/> <div>En Adrenalin, fija <strong>Formato de píxel: RGB 4:4:4</strong> y <strong>Rango completo (0–255)</strong>. Escalado: <strong>Panel completo</strong>.</div></div>
+            <div class="check only-nvidia"><input type="checkbox" data-key="pc_rgb_nv"/> <div>En NVIDIA, <strong>Salida de color: RGB</strong>, <strong>Rango: Completo</strong>, <strong>Profundidad: 8‑bit</strong>.</div></div>
+            <div class="check only-intel"><input type="checkbox" data-key="pc_rgb_intel"/> <div>En Intel GCC, usa <strong>RGB completo</strong> y desactiva mejoras de vídeo.</div></div>
+          </div>
+        </details>
+
+        <details>
+          <summary>3) Controladores, chipset y BIOS</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="pc_gpu_update"/> <div>Actualiza <strong>drivers de la GPU</strong> (Adrenalin/NVIDIA/Intel) y el <strong>chipset</strong>.</div></div>
+            <div class="check"><input type="checkbox" data-key="pc_bios"/> <div>Comprueba si hay <strong>actualización de BIOS/UEFI</strong> para tu Chuwi. Si existe opción de <strong>VRR/FreeSync</strong> en BIOS, desactívala.</div></div>
+            <div class="check"><input type="checkbox" data-key="pc_power"/> <div>Plan de energía: <span class="kbd">Alto rendimiento</span>. Desactiva <strong>suspensión selectiva</strong> de USB/PCIe durante pruebas.</div></div>
+          </div>
+        </details>
+
+        <details>
+          <summary>4) Windows · Configuraciones que pueden provocar re‑handshake</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="pc_game_opt"/> <div>En <span class="kbd">Sistema → Pantalla → Gráficos</span>, desactiva <strong>Optimizaciones para juegos en ventana</strong>.</div></div>
+            <div class="check"><input type="checkbox" data-key="pc_hags"/> <div>En <span class="kbd">Sistema → Pantalla → Configuración de gráficos</span>, prueba con <strong>Programación de GPU con aceleración de hardware</strong> desactivada.</div></div>
+            <div class="check"><input type="checkbox" data-key="pc_sleep"/> <div>En <span class="kbd">Energía y suspensión</span>, desactiva apagado de pantalla/ahorro agresivo mientras pruebas.</div></div>
+          </div>
+        </details>
+
+        <details>
+          <summary>5) Si persiste: forzar EDID estable</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="pc_edid"/> <div>Considera un <strong>emulador de EDID</strong> (adaptador HDMI que fija la señal) o usar una <strong>configuración EDID personalizada</strong> con herramientas avanzadas (p. ej., CRU). Úsalo sólo si lo anterior no funcionó.</div></div>
+          </div>
+          <p class="hint">Útil cuando la TV anuncia capacidades variables (VRR/ALLM) que el mini PC intenta usar y terminan re‑negociando la señal.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- SMART TV -->
+    <section id="tab-tv">
+      <div class="card">
+        <h2>Smart TV · Ajustes que suelen provocar re‑sincronización</h2>
+        <details open>
+          <summary>1) CEC / ALLM / VRR</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="tv_cec"/> <div>Desactiva <strong>HDMI‑CEC</strong> (Anynet+, Simplink, Bravia Sync…). Reinicia TV y Mini PC.</div></div>
+            <div class="check"><input type="checkbox" data-key="tv_allm"/> <div>Desactiva <strong>ALLM / Modo Juego Automático</strong>.</div></div>
+            <div class="check"><input type="checkbox" data-key="tv_vrr"/> <div>Desactiva <strong>VRR / FreeSync</strong> en la entrada usada por el PC.</div></div>
+          </div>
+        </details>
+        <details>
+          <summary>2) Formato de entrada y posprocesado</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="tv_pc_label"/> <div>Renombra la entrada a <strong>PC</strong> (muchas TVs aplican un perfil estable para ordenadores).</div></div>
+            <div class="check"><input type="checkbox" data-key="tv_deepcolor"/> <div>Alterna <strong>HDMI Deep Colour / UHD Color</strong>: pruébalo activado y desactivado.</div></div>
+            <div class="check"><input type="checkbox" data-key="tv_overscan"/> <div>Desactiva <strong>Overscan</strong> y usa <strong>1:1 / Just Scan</strong>.</div></div>
+            <div class="check"><input type="checkbox" data-key="tv_motion"/> <div>Desactiva <strong>Motion smoothing / TruMotion</strong> y mejoras de imagen que puedan forzar resyncs.</div></div>
+          </div>
+        </details>
+        <details>
+          <summary>3) Energía, firmware y puertos</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="tv_eco"/> <div>Desactiva <strong>modos ECO / Ahorro</strong> y funciones tipo <strong>Quick Start+</strong>.</div></div>
+            <div class="check"><input type="checkbox" data-key="tv_fw"/> <div>Actualiza el <strong>firmware</strong> de la TV.</div></div>
+            <div class="check"><input type="checkbox" data-key="tv_port"/> <div>Prueba otro <strong>puerto HDMI</strong> que no sea ARC/eARC.</div></div>
+          </div>
+        </details>
+        <details>
+          <summary>4) Sonido / Passthrough</summary>
+          <div class="grid">
+            <div class="check"><input type="checkbox" data-key="tv_audio"/> <div>Si usas barra/AVR, desactiva <strong>eARC</strong> temporalmente o conecta el PC <strong>directo a la TV</strong> para descartar re‑negociación por audio.</div></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- CABLEADO -->
+    <section id="tab-cable">
+      <div class="card">
+        <h2>Cableado y dispositivos intermedios</h2>
+        <div class="grid cols-2">
+          <div>
+            <details open>
+              <summary>Recomendaciones de cable</summary>
+              <div class="check"><input type="checkbox" data-key="cable_cert"/> <div>Usa un HDMI <strong>certificado High Speed 18 Gbps (2.0)</strong> o superior, <strong>≤ 2 m</strong>.</div></div>
+              <div class="check"><input type="checkbox" data-key="cable_alt"/> <div>Evita adaptadores, duplicadores y hubs. Si debes usar uno, prueba sin él.</div></div>
+              <div class="check"><input type="checkbox" data-key="cable_other"/> <div>Prueba con otro cable que <em>sepas</em> que funciona con 4K@60 en otro equipo.</div></div>
+            </details>
+          </div>
+          <div>
+            <details open>
+              <summary>Intermedios (AVR / Splitter / Capturadora)</summary>
+              <div class="check"><input type="checkbox" data-key="mid_bypass"/> <div>Conecta el Mini PC <strong>directo</strong> a la TV para descartar el intermediario.</div></div>
+              <div class="check"><input type="checkbox" data-key="mid_fixed"/> <div>Si el intermedio tiene opciones, fuerza <strong>4K@60, RGB, 8‑bit</strong> y desactiva VRR/ALLM.</div></div>
+              <div class="check"><input type="checkbox" data-key="mid_edid"/> <div>Como último recurso, usa un <strong>emulador EDID</strong> para fijar capacidades y evitar re‑negociación.</div></div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRUEBAS -->
+    <section id="tab-tests">
+      <div class="card">
+        <h2>Pruebas y utilidades</h2>
+        <p class="hint">Usa estas herramientas para detectar si los saltos coinciden con cambios de Hz/imagen.</p>
+        <div class="fswrap">
+          <button id="fsBtn">🖥️ Pantalla completa</button>
+          <button data-color="#000000" class="colorBtn">Negro</button>
+          <button data-color="#ffffff" class="colorBtn">Blanco</button>
+          <button data-color="#ff0000" class="colorBtn">Rojo</button>
+          <button data-color="#00ff00" class="colorBtn">Verde</button>
+          <button data-color="#0000ff" class="colorBtn">Azul</button>
+          <button id="clearOverlay">Quitar color</button>
+        </div>
+        <p class="hint">Cambia de color y mira si la TV hace el re‑sincronizado. Si ocurre, anótalo:</p>
+        <div class="row">
+          <button id="markJump" title="Registrar salto">📍 Registrar salto</button>
+          <span id="jumpCount" class="tag">Saltos: 0</span>
+          <span id="lastTime" class="tag">Último: —</span>
+        </div>
+        <details style="margin-top:12px">
+          <summary>Notas</summary>
+          <textarea id="notes" rows="6" style="width:100%;border:1px solid var(--border);background:var(--card);color:var(--fg);border-radius:12px;padding:10px"></textarea>
+        </details>
+      </div>
+    </section>
+
+    <!-- GUÍAS PASO A PASO -->
+    <section id="tab-guides">
+      <div class="card">
+        <h2>Guías paso a paso · Mini PC y Smart TV</h2>
+        <p class="hint">Instrucciones concisas para cada selección. Ajusta arriba tu <strong>SO</strong> y <strong>GPU</strong> para leer lo relevante.</p>
+
+        <details open>
+          <summary>Mini PC · Estabilizar vídeo (60/50 Hz, sin VRR)</summary>
+          <ol>
+            <li><strong>Fijar Hz</strong> — Windows 11/10: <span class="kbd">Configuración → Sistema → Pantalla → Configuración de pantalla avanzada</span> → elige tu TV → <em>Frecuencia</em> = <strong>60 Hz</strong> (o <strong>50 Hz</strong>). Desactiva <strong>HDR</strong> temporalmente.</li>
+            <li class="only-w11"><strong>Desactivar DRR</strong> — <span class="kbd">Pantalla → Gráficos → Valores predeterminados</span> → <em>Frecuencia de actualización variable</em> = <strong>Desactivada</strong>.</li>
+            <li class="only-amd"><strong>AMD FreeSync OFF</strong> — Abre <em>AMD Adrenalin</em> → <em>Pantalla</em> → desactiva <strong>FreeSync</strong> para la TV.</li>
+            <li class="only-nvidia"><strong>NVIDIA G‑SYNC OFF</strong> — <em>Panel de control NVIDIA → Pantalla → Configurar G‑SYNC</em> → desmarca para ese monitor.</li>
+            <li class="only-intel"><strong>Intel VRR OFF</strong> — <em>Intel Graphics Command Center → Display</em> → desactiva <strong>VRR</strong> si aparece.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Mini PC · Formato de color y escalado</summary>
+          <ol>
+            <li class="only-amd"><strong>AMD</strong> — <em>Adrenalin → Pantalla</em> → <em>Formato de píxel</em> = <strong>RGB 4:4:4</strong>; <em>Rango</em> = <strong>Completo (0–255)</strong>; <em>Profundidad</em> = <strong>8‑bpc</strong>; <em>Escalado</em> = <strong>Panel completo</strong>.</li>
+            <li class="only-nvidia"><strong>NVIDIA</strong> — <em>Panel de control → Cambiar resolución</em> → <em>Formato</em> = <strong>RGB</strong>; <em>Rango</em> = <strong>Completo</strong>; <em>Profundidad</em> = <strong>8‑bit</strong>.</li>
+            <li class="only-intel"><strong>Intel</strong> — <em>Intel GCC → Display</em> → <em>Color Range</em> = <strong>Full</strong>; desactiva mejoras de vídeo.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Mini PC · Controladores, BIOS y energía</summary>
+          <ol>
+            <li><strong>Actualizar GPU</strong> — Instala el último controlador de tu GPU (AMD/NVIDIA/Intel) y <strong>chipset</strong>.</li>
+            <li><strong>BIOS/UEFI</strong> — Revisa si hay actualización. Si ves <em>VRR/FreeSync</em> en BIOS, ponlo en <strong>Disabled</strong>.</li>
+            <li><strong>Energía</strong> — <span class="kbd">Configuración → Energía</span> → plan <strong>Alto rendimiento</strong>; desactiva suspensión selectiva USB/PCIe durante pruebas.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Mini PC · Evitar re‑handshakes de Windows</summary>
+          <ol>
+            <li><strong>Optimización de juegos en ventana</strong> — <span class="kbd">Pantalla → Gráficos → Valores predeterminados</span> → desactiva.</li>
+            <li><strong>HAGS</strong> — <span class="kbd">Pantalla → Gráficos → Cambiar configuración predeterminada</span> → desactiva <em>Programación de GPU con aceleración de hardware</em> y prueba.</li>
+            <li><strong>Suspensión</strong> — <span class="kbd">Energía y suspensión</span> → pantallas y ahorro = <strong>Nunca</strong> mientras pruebas.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Smart TV · Desactivar CEC/ALLM/VRR</summary>
+          <ol>
+            <li><strong>CEC</strong> — Desactiva CEC (Samsung <em>Anynet+</em>, LG <em>Simplink</em>, Sony <em>Bravia Sync</em>, Philips <em>EasyLink</em>). Reinicia TV y PC.</li>
+            <li><strong>ALLM / Modo Juego automático</strong> — Desactiva en la entrada usada.</li>
+            <li><strong>VRR/FreeSync</strong> — Desactiva para esa HDMI.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Smart TV · Entrada y posprocesado</summary>
+          <ol>
+            <li><strong>Renombrar entrada</strong> — Etiqueta como <strong>PC</strong> si tu TV lo permite.</li>
+            <li><strong>UHD/Deep Colour</strong> — Alterna la opción (ON/OFF) para probar estabilidad.</li>
+            <li><strong>Escaneo</strong> — <em>Just Scan / 1:1</em>; desactiva <em>Overscan</em> y <em>Motion smoothing</em>.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Cableado e intermedios</summary>
+          <ol>
+            <li><strong>Cable</strong> — Usa HDMI certificado 18 Gbps (2.0) ≤2 m.</li>
+            <li><strong>Directo</strong> — Conecta Mini PC → TV sin AVR/splitter para descartar.</li>
+            <li><strong>EDID</strong> — Si persiste, usa emulador EDID o CRU para fijar capacidades.</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Publicar en GitHub (carpeta <em>proyectos/hdmi-saltos</em>) · Web</summary>
+          <ol>
+            <li>Entra a tu repositorio de tu web (p. ej. <em>username.github.io</em>).</li>
+            <li><strong>Add file → Create new file</strong>.</li>
+            <li>Escribe el nombre del archivo como <span class="kbd">proyectos/hdmi-saltos/index.html</span> (GitHub crea las carpetas automáticamente).</li>
+            <li>Pega el contenido de esta página y <strong>Commit</strong> en <em>main</em>.</li>
+            <li>Abre <span class="kbd">https://username.github.io/proyectos/hdmi-saltos/</span> (cambia <em>username</em> por el tuyo).</li>
+          </ol>
+        </details>
+
+        <details>
+          <summary>Publicar en GitHub · Línea de comandos (alternativa)</summary>
+          <ol>
+            <li><span class="kbd">git pull</span></li>
+            <li><span class="kbd">mkdir -p proyectos/hdmi-saltos</span></li>
+            <li>Guarda este archivo como <span class="kbd">proyectos/hdmi-saltos/index.html</span></li>
+            <li><span class="kbd">git add proyectos/hdmi-saltos/index.html</span></li>
+            <li><span class="kbd">git commit -m "Add guía HDMI saltos"</span></li>
+            <li><span class="kbd">git push</span></li>
+            <li>Comprueba la URL <em>/proyectos/hdmi-saltos/</em>.</li>
+          </ol>
+        </details>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="tab-faq">
+      <div class="card">
+        <h2>FAQ</h2>
+        <details open>
+          <summary>¿Por qué me pasa con el Mini PC y no con mi PC de sobremesa?</summary>
+          <p>Los mini PC con iGPU suelen activar funciones como <strong>VRR/ALLM</strong> o cambian el <strong>formato de color</strong> según lo que anuncia la TV. Esa negociación extra puede provocar re‑sincronizaciones. Fijar <strong>60 Hz</strong>, desactivar <strong>VRR/ALLM/CEC</strong> y usar <strong>RGB 4:4:4 8‑bit</strong> suele estabilizar.</p>
+        </details>
+        <details>
+          <summary>Al ver vídeos se corta, pero en el escritorio va bien</summary>
+          <p>Desactiva <strong>HDR</strong> y la <strong>aceleración de hardware</strong> del reproductor/navegador para probar. Comprueba que la tasa de refresco no cambie a 24/23,976 automáticamente.</p>
+        </details>
+        <details>
+          <summary>Nada funciona… ¿y ahora qué?</summary>
+          <p>Considera un <strong>emulador EDID</strong> o fijar un EDID estable con herramientas avanzadas (CRU). También puedes intentar 4K a <strong>50 Hz</strong> o bajar a <strong>1080p60</strong> para confirmar estabilidad.</p>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div>Hecho para Mini PC Chuwi (Ryzen 5 6600H · Radeon 660M) y Smart TV. Guarda tu progreso automáticamente.</div>
+  </footer>
+
+  <div id="overlay" style="position:fixed;inset:0;display:none"></div>
+
+  <script>
+    // ==== Estado persistente ====
+    const qs = s => document.querySelector(s);
+    const qsa = s => Array.from(document.querySelectorAll(s));
+    const state = JSON.parse(localStorage.getItem('hdmiFixState')||'{}');
+
+    const save = () => localStorage.setItem('hdmiFixState', JSON.stringify(state));
+
+    // Tema
+    const themeBtn = qs('#themeBtn');
+    const setTheme = t => { document.body.classList.toggle('light', t==='light'); state.theme=t; save(); }
+    setTheme(state.theme || 'dark');
+    themeBtn.addEventListener('click', ()=> setTheme(document.body.classList.contains('light')?'dark':'light'));
+
+    // Tabs
+    const tabs = qsa('.tab');
+    const openTab = id => {
+      tabs.forEach(t=>t.classList.toggle('active', t.dataset.tab===id));
+      qsa('main section').forEach(s=>s.classList.toggle('active', s.id===`tab-${id}`));
+      state.tab=id; save();
+    };
+    tabs.forEach(t=>t.addEventListener('click', ()=>openTab(t.dataset.tab)));
+    openTab(state.tab||'diag');
+
+    // Selectores OS/GPU
+    const osSel = qs('#osSel');
+    const gpuSel = qs('#gpuSel');
+    if(state.os) osSel.value=state.os; else state.os=osSel.value;
+    if(state.gpu) gpuSel.value=state.gpu; else state.gpu=gpuSel.value;
+    const applyHints = ()=>{
+      qs('#osHint').textContent = osSel.value==='w11'?'Windows 11':'Windows 10';
+      qs('#gpuHint').textContent = gpuSel.options[gpuSel.selectedIndex].text;
+      // Mostrar/ocultar bloques por OS/GPU
+      qsa('.only-w11').forEach(el=> el.style.display = osSel.value==='w11' ? '' : 'none');
+      qsa('.only-amd').forEach(el=> el.style.display = gpuSel.value==='amd' ? '' : 'none');
+      qsa('.only-nvidia').forEach(el=> el.style.display = gpuSel.value==='nvidia' ? '' : 'none');
+      qsa('.only-intel').forEach(el=> el.style.display = gpuSel.value==='intel' ? '' : 'none');
+      state.os=osSel.value; state.gpu=gpuSel.value; save();
+    }
+    osSel.addEventListener('change', applyHints);
+    gpuSel.addEventListener('change', applyHints);
+    applyHints();
+
+    // Construir diagnóstico rápido
+    const diag = [
+      {key:'d_cable', text:'Cambia a un cable HDMI certificado (≤2 m, 18 Gbps o más) y evita adaptadores.'},
+      {key:'d_port', text:'Usa otro puerto HDMI de la TV (mejor que NO sea ARC/eARC).'},
+      {key:'d_fixhz', text:'Fija 60 Hz (o 50 Hz) y desactiva HDR temporalmente.'},
+      {key:'d_vrr', text:'Desactiva VRR/FreeSync/ALLM tanto en el Mini PC como en la TV.'},
+      {key:'d_cec', text:'Desactiva HDMI‑CEC en la TV. Reinicia ambos equipos.'},
+      {key:'d_color', text:'Fuerza RGB 4:4:4 8‑bit y rango completo (0–255).'},
+      {key:'d_fw', text:'Actualiza drivers de GPU y firmware de la TV.'},
+      {key:'d_bypass', text:'Conecta directo Mini PC → TV (sin barras/AVR/splitters).'},
+    ];
+    const diagList = qs('#diagList');
+    diag.forEach(step=>{
+      const row = document.createElement('label');
+      row.className='check';
+      row.innerHTML = `<input type="checkbox" data-key="${step.key}"> <div>${step.text}</div>`;
+      diagList.appendChild(row);
+    });
+
+    // Restaurar checks
+    const restoreChecks = ()=>{
+      qsa('input[type="checkbox"]').forEach(chk=>{
+        const k = chk.dataset.key;
+        chk.checked = !!state[k];
+        chk.addEventListener('change', ()=>{ state[k] = chk.checked; save(); });
+      });
+      qs('#notes').value = state.notes||'';
+    }
+    restoreChecks();
+    qs('#notes').addEventListener('input', e=>{ state.notes=e.target.value; save(); })
+
+    // Exportar progreso
+    qs('#exportBtn').addEventListener('click', ()=>{
+      const checks = {};
+      qsa('input[type="checkbox"]').forEach(chk=> checks[chk.dataset.key]=chk.checked);
+      const payload = {
+        fecha: new Date().toISOString(),
+        os: osSel.value, gpu: gpuSel.value,
+        tab: state.tab, saltos: state.jumps||0, ultimoSalto: state.lastJump||null,
+        notas: qs('#notes').value, checks
+      };
+      const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'hdmi_saltos_plan.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+
+    // Reset
+    qs('#resetBtn').addEventListener('click', ()=>{
+      if(!confirm('Esto borrará tu progreso. ¿Continuar?')) return;
+      localStorage.removeItem('hdmiFixState');
+      location.reload();
+    });
+
+    // Pantalla completa y overlay de color
+    const overlay = qs('#overlay');
+    const setOverlay = (color)=>{
+      overlay.style.display = color? 'block':'none';
+      overlay.style.background = color||'transparent';
+    }
+    qsa('.colorBtn').forEach(btn=> btn.addEventListener('click', ()=> setOverlay(btn.dataset.color)));
+    qs('#clearOverlay').addEventListener('click', ()=> setOverlay(null));
+    qs('#fsBtn').addEventListener('click', async ()=>{
+      if(!document.fullscreenElement){ await document.documentElement.requestFullscreen().catch(()=>{});} else { await document.exitFullscreen().catch(()=>{}); }
+    });
+
+    // Registro de saltos
+    const jumpCount = qs('#jumpCount');
+    const lastTime = qs('#lastTime');
+    const updateJumps = ()=>{
+      jumpCount.innerHTML = 'Saltos: '+(state.jumps||0);
+      lastTime.innerHTML = 'Último: '+(state.lastJump? new Date(state.lastJump).toLocaleString(): '—');
+    }
+    updateJumps();
+    qs('#markJump').addEventListener('click', ()=>{
+      state.jumps = (state.jumps||0)+1;
+      state.lastJump = Date.now();
+      save(); updateJumps();
+    });
+  </script>
+</body>
+</html>
