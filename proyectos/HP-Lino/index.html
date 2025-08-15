@@ -1,51 +1,466 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-theme="system">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Índice · Guías Cubase (Responsive)</title>
-<meta name="description" content="Índice para acceder a la guía de doble boot y a la comparativa de versiones de Cubase en HP Elite 8300.">
+<title>Cubase · Guía Unificada (Índice + Requisitos + Doble Boot + Comparativa + Optimización)</title>
+<meta name="description" content="Todo en un solo HTML: requisitos de software, guía de doble boot, comparativa de versiones de Cubase y optimización de Windows 10 para audio.">
 <style>
-  :root{--bg:#0b1020;--card:#121733;--muted:#94a2c7;--text:#e9edff;--line:#26306b;--accent:#78a6ff;--glow:0 4px 20px rgba(120,166,255,.25)}
+  /* ===== Theme tokens ===== */
+  :root{
+    --bg:#0b1020; --panel:#121733; --soft:#1b2350; --muted:#9aa8cf; --text:#e9edff; --line:#26306b; --accent:#78a6ff;
+    --good:#4cd196; --warn:#ffc857; --bad:#ff6b6b; --link:#78a6ff; --shadow:0 6px 24px rgba(0,0,0,.28);
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f6f7fb; --panel:#ffffff; --soft:#f2f4ff; --muted:#54607a; --text:#0c1326; --line:#dfe4f4; --accent:#315de6;
+      --link:#224fd8; --shadow:0 10px 30px rgba(0,0,0,.08);
+    }
+  }
+  html[data-theme="dark"]{
+    --bg:#0b1020; --panel:#121733; --soft:#1b2350; --muted:#9aa8cf; --text:#e9edff; --line:#26306b; --accent:#78a6ff; --link:#78a6ff; --shadow:0 6px 24px rgba(0,0,0,.28);
+  }
+  html[data-theme="light"]{
+    --bg:#f6f7fb; --panel:#ffffff; --soft:#f2f4ff; --muted:#54607a; --text:#0c1326; --line:#dfe4f4; --accent:#315de6; --link:#224fd8; --shadow:0 10px 30px rgba(0,0,0,.08);
+  }
+
+  /* ===== Base ===== */
   *{box-sizing:border-box}
-  html,body{margin:0;background:radial-gradient(1200px 800px at 20% -10%, rgba(120,166,255,.08), transparent 60%),radial-gradient(800px 600px at 100% 0, rgba(76,209,150,.08), transparent 60%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;line-height:1.5}
-  .wrap{max-width:980px;margin:0 auto;padding:28px}
-  header{margin:4px 0 18px;text-align:center}
-  h1{font-size:2rem;margin:.2rem 0 .4rem;color:#dfe7ff}
-  p.sub{color:var(--muted);margin:0}
-  .grid{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
-  @media (max-width:760px){.grid{grid-template-columns:1fr}}
-  .card{display:block;background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 200px),var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-decoration:none;color:inherit;box-shadow:var(--glow);transition:transform .15s ease, box-shadow .15s ease}
-  .card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
-  .card h2{font-size:1.25rem;margin:.2rem 0 .2rem}
-  .card p{margin:.2rem 0 0;color:var(--muted)}
-  .badge{display:inline-block;background:#0e1538;border:1px solid var(--line);border-radius:999px;padding:.18rem .55rem;margin-right:.35rem;font-size:.82rem;white-space:nowrap}
-  footer{margin-top:26px;text-align:center;color:var(--muted);font-size:.95rem}
+  html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;line-height:1.55;scroll-behavior:smooth}
+  a{color:var(--link);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px}
+  .grid{display:grid;gap:16px}
+  .cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:980px){.cols-3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  @media (max-width:640px){.cols-2,.cols-3{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+  .tag{display:inline-block;background:var(--soft);border:1px solid var(--line);border-radius:999px;padding:.18rem .55rem;margin-right:.35rem;font-size:.82rem;white-space:nowrap}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--soft);border-radius:999px;padding:.25rem .6rem;font-size:.85rem;white-space:nowrap}
+  .muted{color:var(--muted)}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--soft);border:1px solid var(--line);color:inherit;border-radius:999px;padding:.45rem .75rem;text-decoration:none}
+  .btn:hover{filter:brightness(1.02)}
+  .cta{display:inline-block;margin-top:10px;padding:.7rem 1rem;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;border:0;cursor:pointer}
+  .kbd{display:inline-block;padding:.05rem .35rem;border:1px solid var(--line);border-radius:6px;background:var(--soft);font-family:ui-monospace,Consolas,monospace;font-size:.85em}
+  code{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:.1rem .35rem}
+  pre{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto}
+
+  /* ===== Top bar ===== */
+  header{position:sticky;top:0;z-index:50;background:linear-gradient(180deg, color-mix(in oklab, var(--bg) 92%, transparent), color-mix(in oklab, var(--bg) 70%, transparent));backdrop-filter:saturate(1.05) blur(6px);border-bottom:1px solid var(--line)}
+  .top{max-width:1100px;margin:0 auto;padding:10px 20px;display:flex;gap:12px;align-items:center;justify-content:space-between}
+  .title h1{margin:0;font-size:1.2rem}
+  .title .sub{margin:2px 0 0;color:var(--muted);font-size:.95rem}
+  .switch{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .switch button{border:0;background:transparent;padding:.45rem .7rem;color:inherit;cursor:pointer}
+  .switch button.active{background:var(--panel)}
+
+  /* ===== Section heads ===== */
+  section > h2{margin:.2rem 0 .6rem;font-size:1.35rem}
+  h3{margin:.2rem 0 .4rem;font-size:1.1rem}
+
+  /* ===== Tables ===== */
+  table{width:100%;border-collapse:collapse;display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  th,td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top;white-space:nowrap}
+  th{color:color-mix(in oklab, var(--text) 85%, var(--bg))}
+  .small{font-size:.95rem}
+
+  /* ===== Float to top ===== */
+  .to-top{position:fixed;right:16px;bottom:16px;z-index:40}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <h1>Índice · Guías y Comparativa Cubase</h1>
-      <p class="sub">Selecciona una de las páginas (diseño responsive para móvil y escritorio).</p>
-    </header>
-
-    <div class="grid">
-      <a class="card" href="guia-doble-boot.html">
-        <span class="badge">Guía</span>
-        <h2>Guía completa: Doble boot Windows 10 para Cubase</h2>
-        <p>Instalación paso a paso, optimización para audio y menú de arranque con tu sistema legacy (VST32).</p>
-      </a>
-      <a class="card" href="comparativa-cubase.html">
-        <span class="badge">Comparativa</span>
-        <h2>Comparativa Cubase para HP Elite 8300 (Pop‑Rock)</h2>
-        <p>9.5 vs 10.5 vs 12 vs 14, recomendación final para tu equipo y flujo de trabajo.</p>
-      </a>
+  <header>
+    <div class="top">
+      <div class="title">
+        <h1>Cubase · Guía Unificada</h1>
+        <div class="sub">Índice · Requisitos de software · Doble Boot · Comparativa · Optimización (tema claro/oscuro)</div>
+      </div>
+      <div class="right">
+        <a class="btn" href="#indice">Índice</a>
+        <div class="switch" role="group" aria-label="Tema">
+          <button id="t-system" class="active" title="Seguir el sistema">Sistema</button>
+          <button id="t-light" title="Tema claro">Claro</button>
+          <button id="t-dark" title="Tema oscuro">Oscuro</button>
+        </div>
+      </div>
     </div>
+  </header>
 
-    <footer>
-      Sugerencia: al guardar, nómbralos como <code>index.html</code>, <code>guia-doble-boot.html</code> y <code>comparativa-cubase.html</code> en la misma carpeta.
-    </footer>
-  </div>
+  <main class="wrap">
+    <!-- INDEX -->
+    <section id="indice" class="card">
+      <h2>Índice</h2>
+      <p class="muted">Todo el contenido está en este único archivo (responsive, imprimible como PDF).</p>
+      <div class="grid cols-3">
+        <a class="card" href="#requisitos-software">
+          <span class="tag">Nuevo</span>
+          <h3>Requisitos de software</h3>
+          <p class="muted">Listado completo y rutas recomendadas.</p>
+        </a>
+        <a class="card" href="#guia-doble-boot">
+          <span class="tag">Guía</span>
+          <h3>Doble boot Windows 10 para Cubase</h3>
+          <p class="muted">Instalación, optimización de audio y menú de arranque con VST32.</p>
+        </a>
+        <a class="card" href="#comparativa">
+          <span class="tag">Comparativa</span>
+          <h3>Versiones de Cubase (9.5 · 10.5 · 12 · 14)</h3>
+          <p class="muted">Estabilidad, consumo y compatibilidad para tu HP Elite 8300.</p>
+        </a>
+        <a class="card" href="#optimizacion">
+          <span class="tag">Optimización</span>
+          <h3>Windows 10 para Grabación de Audio</h3>
+          <p class="muted">Latencia baja, estabilidad ASIO y cero cortes.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- REQUISITOS DE SOFTWARE -->
+    <section id="requisitos-software" class="card">
+      <h2>Requisitos de software (proceso completo)</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Windows y controladores</h3>
+          <ul>
+            <li><strong>Windows 10 Pro 64‑bit (22H2)</strong>: ISO o Media Creation Tool.</li>
+            <li><strong>Drivers HP Elite 8300</strong>: Chipset, Intel MEI, LAN/Wi‑Fi, (RST si aplica).</li>
+            <li><strong>Actualizaciones críticas</strong>: Windows Update (una pasada inicial).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Audio y DAW</h3>
+          <ul>
+            <li><strong>Focusrite Control</strong> + <strong>ASIO</strong> (Scarlett 2i2 3ª Gen).</li>
+            <li><strong>Steinberg Download Assistant</strong> (instaladores Cubase).</li>
+            <li><strong>Licencias</strong>:
+              <ul>
+                <li>Cubase 10/10.5: <em>eLicenser</em> (USB).</li>
+                <li>Cubase 12/14: <em>Steinberg Licensing</em> (sin dongle).</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Utilidades recomendadas</h3>
+          <ul>
+            <li><strong>EasyBCD</strong> (opcional): gestionar entradas de arranque.</li>
+            <li><strong>Macrium Reflect</strong> (opcional): imagen/backup del sistema estable.</li>
+            <li><strong>LatencyMon</strong> (opcional): diagnóstico de latencia DPC.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Estructura de datos</h3>
+          <ul>
+            <li><strong>Carpeta común de proyectos</strong>: <code>D:\Audio</code>.</li>
+            <li>VST2: <code>C:\VSTPlugins</code> · VST3: <code>C:\Program Files\Common Files\VST3</code>.</li>
+            <li>Bibliotecas pesadas en disco/partición de datos (no en C:).</li>
+          </ul>
+        </div>
+      </div>
+      <p><a class="btn" href="#indice">⟵ Volver al índice</a></p>
+    </section>
+
+    <!-- GUIA DOBLE BOOT -->
+    <section id="guia-doble-boot" class="card">
+      <h2>Guía: Doble boot Windows 10 para Cubase</h2>
+      <p class="muted"><span class="tag">Equipo</span> HP Elite 8300 · 32 GB · SSD · Scarlett 2i2 (3ª Gen) · Windows 10 Pro 22H2</p>
+
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>1) Requisitos y decisiones</h3>
+          <strong>Necesitas</strong>
+          <ul>
+            <li>Windows 10 (Media Creation Tool).</li>
+            <li>Drivers HP Elite 8300 (chipset/MEI/red).</li>
+            <li>Focusrite Control + ASIO.</li>
+            <li>Instaladores de Cubase 10/12/14 + licencias.</li>
+          </ul>
+          <strong>Decisiones</strong>
+          <ul>
+            <li>W10 Pro 64‑bit (22H2) en SSD nuevo.</li>
+            <li>Licencia por instalación (suele reactivarse por huella en misma placa).</li>
+            <li>Particiones separadas; proyectos en disco común.</li>
+          </ul>
+          <div class="card"><strong class="tag">Backup</strong> Copia tus proyectos/ajustes antes de tocar el SSD viejo.</div>
+        </div>
+
+        <div class="card">
+          <h3>2) Crear USB e instalar</h3>
+          <ol>
+            <li>USB booteable (≥8 GB) con Media Creation Tool.</li>
+            <li>Desconecta el SSD viejo (VST32).</li>
+            <li>Conecta solo el SSD nuevo y arranca desde el USB.</li>
+            <li>Instala <strong>Windows 10 Pro</strong> (sin Internet, cuenta local). Borra y crea partición nueva.</li>
+          </ol>
+          <p><span class="kbd">Esc</span> menú inicio · <span class="kbd">F9</span> elegir dispositivo · <span class="kbd">F10</span> BIOS (HP Elite 8300)</p>
+          <div class="card">Omitir Cortana/OneDrive/telemetría en OOBE.</div>
+        </div>
+
+        <div class="card">
+          <h3>3) Ajustes BIOS/UEFI</h3>
+          <div class="grid cols-2">
+            <div>
+              <strong>Básicos</strong>
+              <ul><li>SATA: <strong>AHCI</strong></li><li>Boot: SSD nuevo primero</li><li>Desactivar PXE/Network Boot</li></ul>
+            </div>
+            <div>
+              <strong>Rendimiento</strong>
+              <ul><li>Desactivar Spread Spectrum (si existe)</li><li>Activar Execute Disable Bit y VT‑x</li><li>Ventiladores Normal/Performance</li></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>4) Drivers base</h3>
+          <ol>
+            <li>Instala chipset/MEI y red (HP).</li>
+            <li>Una pasada de Windows Update (parches críticos).</li>
+            <li>Opcional: controladores de almacenamiento adicionales.</li>
+          </ol>
+          <div class="card"><strong>Evita</strong> que Windows reemplace el driver de audio: bloquea actualizaciones de drivers (Configuración avanzada del sistema → Hardware).</div>
+        </div>
+
+        <div class="card">
+          <h3>5) Scarlett 2i2 + ASIO</h3>
+          <ol>
+            <li>Instala <strong>Focusrite Control</strong> (ASIO). Reinicia si lo pide.</li>
+            <li>Conecta a USB trasero (evita hubs). Desactiva ahorro de energía USB.</li>
+            <li>Define Sample Rate (44.1/48) y Buffer.</li>
+          </ol>
+          <table>
+            <thead><tr><th>Uso</th><th>Buffer</th><th>Latencia aprox.</th></tr></thead>
+            <tbody><tr><td>Grabación</td><td>128–256</td><td>6–10 ms</td></tr><tr><td>Mezcla</td><td>512–1024</td><td>12–22 ms</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h3>6) Optimización Windows</h3>
+          <div class="grid cols-2">
+            <div><strong>Energía</strong><ul><li>Alto rendimiento</li><li>Disco: Nunca apagar</li><li>USB: sin suspensión selectiva</li></ul></div>
+            <div><strong>Audio</strong><ul><li>Scarlett por defecto o desactivar integrado</li><li>Control exclusivo (revisar)</li><li>Sin mejoras/efectos</li></ul></div>
+            <div><strong>USB</strong><ul><li>USB Root Hub → desmarcar “Permitir que apague…”</li><li>Evitar hubs/puertos frontales</li></ul></div>
+            <div><strong>Procesos</strong><ul><li>Sin Game Bar/Game DVR/Modo Juego</li><li>Defender: exclusiones Proyectos/VST</li><li>msconfig → inicio selectivo (opcional)</li></ul></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>7) Instalar Cubase 10/12/14</h3>
+          <ol>
+            <li>Instala Steinberg Download Assistant.</li>
+            <li>Licencias: 10 (eLicenser), 12/14 (Steinberg Licensing).</li>
+            <li>Rutas: VST2 <code>C:\VSTPlugins</code> · VST3 <code>C:\Program Files\Common Files\VST3</code> · Librerías en disco de datos.</li>
+            <li>Primer arranque: <strong>ASIO Focusrite</strong> y buffer adecuado.</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>8) Configurar el Dual Boot</h3>
+          <ol>
+            <li>Apaga y reconecta el SSD viejo.</li>
+            <li>En BIOS (F10), SSD nuevo primero.</li>
+            <li>En Windows nuevo: <span class="kbd">msconfig</span> → Arranque (nombres y timeout 5–10 s). Si no aparece, usar EasyBCD.</li>
+            <li>Reinicia y prueba.</li>
+          </ol>
+          <pre>powercfg /h off
+bcdedit /timeout 8
+bcdedit /enum firmware
+bcdedit /set {current} description "Windows Nuevo (Cubase 10/12/14)"</pre>
+          <div class="card"><strong>Licencia</strong>: suele activarse por huella; si no, activa con tu clave.</div>
+        </div>
+
+        <div class="card">
+          <h3>9) Proyectos y datos</h3>
+          <div class="grid cols-2">
+            <div><strong>Estrategia</strong><ul><li>Carpeta común <strong>D:\Audio</strong></li><li>Estructura por DAW/cliente/fecha</li></ul></div>
+            <div><strong>Compatibilidad</strong><ul><li>Congelar/exportar stems desde VST32</li><li>Documentar plugins legacy en <code>README.txt</code></li></ul></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>10) Mantenimiento</h3>
+          <ul>
+            <li>Actualizar manualmente cada 2–3 meses (con Punto de restauración).</li>
+            <li>Exclusiones antivirus para Proyectos y VST.</li>
+            <li>Sistema “limpio” en el Windows de audio.</li>
+            <li>Reiniciar antes de sesión; cerrar apps en segundo plano.</li>
+            <li>Imagen del sistema estable (Macrium Reflect).</li>
+          </ul>
+        </div>
+      </div>
+      <p><a class="btn" href="#indice">⟵ Volver al índice</a></p>
+    </section>
+
+    <!-- COMPARATIVA -->
+    <section id="comparativa" class="card">
+      <h2>Comparativa Cubase para HP Elite 8300 (Pop‑Rock)</h2>
+      <p class="muted"><span class="tag">Equipo</span> HP Elite 8300 · 32 GB RAM · SSD · Scarlett 2i2</p>
+
+      <section class="card">
+        <h3>Resumen ejecutivo</h3>
+        <p><strong>Recomendación principal:</strong> <span class="pill">Cubase 10.5 Pro</span> — equilibrio entre estabilidad, consumo moderado y compatibilidad VST2/VST3.</p>
+        <p><strong>Alternativa moderna:</strong> Cubase 12 Pro — sin dongle y motor ASIO más nuevo (solo VST3).</p>
+      </section>
+
+      <section class="card">
+        <h3>Tabla comparativa</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Versión</th><th>Pros</th><th>Contras</th><th>Estabilidad</th><th>CPU/RAM</th><th>Compatibilidad</th><th>Pop‑Rock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>9.5 Pro (2017)</strong></td>
+              <td>Muy estable, ágil en hardware veterano, amplio VST2.</td>
+              <td>Funciones más antiguas; sin soporte actual.</td>
+              <td>★★★★★</td><td>Bajo</td><td>VST2/VST3 (época)</td><td>Excelente</td>
+            </tr>
+            <tr>
+              <td><strong>10.5 Pro (2019)</strong></td>
+              <td>Equilibrio funciones/rendimiento; interfaz fluida; muy estable.</td>
+              <td>Algo más exigente que 9.5.</td>
+              <td>★★★★★</td><td>Medio‑bajo</td><td>VST2/VST3</td><td>Muy sólido</td>
+            </tr>
+            <tr>
+              <td><strong>12 Pro (2022)</strong></td>
+              <td>Sin dongle; mejoras ASIO; mejor edición vocal/MIDI.</td>
+              <td>Más consumo; VST2 con puente.</td>
+              <td>★★★★☆</td><td>Medio</td><td>VST3 nativo</td><td>Muy bueno</td>
+            </tr>
+            <tr>
+              <td><strong>14 Pro (2024)</strong></td>
+              <td>Últimas funciones y motor.</td>
+              <td>Más pesado; solo VST3.</td>
+              <td>★★★★☆</td><td>Medio‑alto</td><td>Solo VST3</td><td>Bueno</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="small muted">En móvil, desplaza la tabla horizontalmente si no cabe completa.</p>
+      </section>
+
+      <section class="card">
+        <h3>Ajustes sugeridos (Scarlett 2i2)</h3>
+        <div class="grid cols-2">
+          <div>
+            <strong>Latencia y buffer</strong>
+            <ul><li>Grabación: <strong>128–256</strong> @ 44.1/48 kHz</li><li>Mezcla: <strong>512–1024</strong></li><li>Monitoreo directo en Scarlett</li></ul>
+          </div>
+          <div>
+            <strong>Proyecto tipo</strong>
+            <ul><li>48 kHz / 24‑bit (o 44.1 kHz)</li><li>Buses Drum / Gtr / Vox</li><li>Limitador suave en master</li></ul>
+          </div>
+        </div>
+      </section>
+      <p><a class="btn" href="#indice">⟵ Volver al índice</a></p>
+    </section>
+
+    <!-- OPTIMIZACIÓN -->
+    <section id="optimizacion" class="card">
+      <h2>Optimización de Windows 10 para Grabación de Audio</h2>
+      <p class="muted"><span class="tag">Objetivo</span> Latencia baja y estabilidad ASIO con Scarlett 2i2 + Cubase.</p>
+
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>1) Energía y rendimiento</h3>
+          <ul>
+            <li>Opciones de energía → <strong>Alto rendimiento</strong>.</li>
+            <li>Disco: <strong>Nunca apagar</strong>.</li>
+            <li>USB: <strong>Desactivar suspensión selectiva</strong>.</li>
+            <li>CPU mínimo = <strong>100%</strong> (si hay picos DPC, baja a 5–10%).</li>
+            <li>BIOS (opcional): desactivar <em>C‑States</em> si hay inestabilidad.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>2) Drivers y dispositivos</h3>
+          <ul>
+            <li>Instalar <strong>Focusrite Control</strong> (ASIO oficial).</li>
+            <li>Sonido → deshabilitar dispositivos no usados.</li>
+            <li>Actualizar <strong>chipset/MEI/red</strong> (HP Elite 8300).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>3) Latencia y buffers</h3>
+          <ul>
+            <li>Focusrite: Grabación <strong>128–256</strong> · Mezcla <strong>512–1024</strong>.</li>
+            <li>Cubase: usar <strong>ASIO Focusrite</strong>.</li>
+            <li>Monitoreo directo (Direct Monitor) si necesitas casi cero latencia.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>4) Servicios y procesos</h3>
+          <ul>
+            <li>Windows Update: <strong>Pausar</strong> durante sesiones.</li>
+            <li>Considera desactivar temporalmente <strong>Windows Search</strong> si indexa intensamente.</li>
+            <li>Antivirus: exclusiones para <code>Proyectos</code> y <code>VST</code>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>5) Efectos y notificaciones</h3>
+          <ul>
+            <li>Sonidos de Windows: <strong>Sin sonidos</strong>.</li>
+            <li>Asistente de concentración: activado.</li>
+            <li>Efectos visuales: desactivar animaciones/transparencias.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>6) Disco y memoria</h3>
+          <ul>
+            <li>SSD con <strong>≥20% libre</strong>.</li>
+            <li>Optimizar unidades (TRIM) para SSD; desfragmentar solo HDD.</li>
+            <li>Librerías pesadas en disco/partición de datos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <section class="card">
+        <h3>Checklist “Studio Ready”</h3>
+        <label><input type="checkbox"> Alto rendimiento</label><br>
+        <label><input type="checkbox"> USB sin suspensión selectiva</label><br>
+        <label><input type="checkbox"> ASIO Focusrite en Cubase</label><br>
+        <label><input type="checkbox"> Buffer 128–256 (grabación)</label><br>
+        <label><input type="checkbox"> Antivirus en modo silencioso/exclusiones</label><br>
+        <label><input type="checkbox"> Notificaciones silenciadas</label><br>
+        <label><input type="checkbox"> SSD ≥20% libre</label><br>
+        <button class="cta" onclick="window.print()">Imprimir / Guardar como PDF</button>
+      </section>
+      <p><a class="btn" href="#indice">⟵ Volver al índice</a></p>
+    </section>
+  </main>
+
+  <div class="to-top"><a class="btn" href="#indice">↑ Arriba</a></div>
+
+  <script>
+    // Theme toggle with localStorage, default to system
+    const root = document.documentElement;
+    const btns = {
+      system: document.getElementById('t-system'),
+      light: document.getElementById('t-light'),
+      dark: document.getElementById('t-dark'),
+    };
+    function applyTheme(mode){
+      root.setAttribute('data-theme', mode);
+      localStorage.setItem('theme-pref', mode);
+      for (const b of Object.values(btns)) b.classList.remove('active');
+      if(mode==='light') btns.light.classList.add('active');
+      else if(mode==='dark') btns.dark.classList.add('active');
+      else btns.system.classList.add('active');
+    }
+    (function(){
+      const pref = localStorage.getItem('theme-pref') || 'system';
+      applyTheme(pref);
+      if(pref==='system'){
+        matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e=>{
+          if(localStorage.getItem('theme-pref')==='system'){
+            root.setAttribute('data-theme','system');
+          }
+        });
+      }
+    })();
+    btns.system.addEventListener('click', ()=>applyTheme('system'));
+    btns.light.addEventListener('click', ()=>applyTheme('light'));
+    btns.dark.addEventListener('click', ()=>applyTheme('dark'));
+  </script>
 </body>
 </html>
