@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HP Elite 8300: Instalar Windows 10 + Drivers (Guía Responsive)</title>
+  <meta name="description" content="Paso a paso para instalar Windows 10 en HP Elite 8300 (UEFI/GPT) y aplicar drivers actualizados. Incluye enlaces oficiales: ISO/Media Creation Tool, Rufus, HP Image Assistant y páginas de soporte HP (SFF, MT, CMT)." />
+  <style>
+    :root{
+      --bg: #0b1020; --card:#111834; --text:#e9ecff; --muted:#9fb0ff;
+      --accent:#7aa2ff; --accent2:#00d4ff; --ok:#38d39f; --warn:#ffd166; --danger:#ff6b6b;
+      --shadow:0 10px 30px rgba(0,0,0,.35); --radius:16px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; background: radial-gradient(1200px 800px at 10% -10%, #16255f 0%, var(--bg) 60%); color:var(--text); font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial}
+    a{color:var(--accent)}
+    .container{width:min(1200px, 100% - 32px); margin-inline:auto}
+    header{position:sticky; top:0; z-index:50; backdrop-filter:blur(10px); background:linear-gradient(180deg, rgba(2,8,23,.8), rgba(2,8,23,.4)); border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{display:flex; align-items:center; gap:16px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700}
+    .logo{width:32px; height:32px; border-radius:10px; background:linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow:var(--shadow)}
+    .chip{font-size:.85rem; color:#0b1020; background:var(--muted); padding:2px 8px; border-radius:999px}
+    .actions{margin-left:auto; display:flex; gap:8px}
+    button{cursor:pointer; border:0; border-radius:12px; padding:10px 14px; background:#1a2552; color:var(--text); box-shadow:var(--shadow)}
+    button:hover{filter:brightness(1.1)}
+    .hero{display:grid; gap:24px; padding:32px 0 24px}
+    .hero h1{font-size: clamp(1.55rem, 1.2rem + 2.2vw, 2.6rem); line-height:1.2; margin:0}
+    .hero p{margin:0; color:#cbd5ff}
+    .hero .grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:16px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius); box-shadow:var(--shadow)}
+    .pad{padding:18px}
+    .grid-2{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:16px}
+    .grid-3{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:16px}
+    section{margin:28px 0}
+    section h2{font-size: clamp(1.25rem, 1rem + 1vw, 1.8rem); margin:0 0 12px}
+    .note{font-size:.95rem; color:#d7defc; background:#0f1633; padding:10px 12px; border-left:4px solid var(--accent); border-radius:10px}
+    .warn{border-left-color:var(--warn)} .ok{border-left-color:var(--ok)} .danger{border-left-color:var(--danger)}
+    details{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.12); border-radius:14px; padding:12px 14px}
+    details[open]{outline:2px solid rgba(122,162,255,.35)}
+    summary{cursor:pointer; font-weight:600}
+    summary::marker{color:var(--muted)}
+    kbd,code{background:#0e1430; border:1px solid rgba(255,255,255,.12); padding:2px 6px; border-radius:8px}
+    footer{margin:40px 0 60px; color:#c1c8ff80; font-size:.9rem}
+    .btns{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.1); text-decoration:none; background:#0f1633}
+    .btn:hover{filter:brightness(1.1)}
+    .toc{display:flex; flex-wrap:wrap; gap:10px}
+    .toc a{display:inline-block; padding:6px 10px; background:#0f1633; border:1px solid rgba(255,255,255,.12); border-radius:999px; text-decoration:none}
+    @media (max-width:980px){ .hero .grid{grid-template-columns:1fr} .grid-2,.grid-3{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><div class="logo"></div><span>HP Elite 8300 — Windows 10 + Drivers</span><span class="chip">Guía paso a paso</span></div>
+      <nav class="actions">
+        <button id="btn-imprimir" title="Imprimir/Guardar en PDF">Imprimir</button>
+        <button id="btn-colapsar" title="Expandir/Colapsar">Expandir todo</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="grid">
+        <div class="card pad">
+          <h1>Instalar Windows 10 en HP Elite 8300 y aplicar drivers actualizados</h1>
+          <p>Guía directa: crea USB con Rufus (GPT/UEFI), instala Windows 10 y aplica controladores con HP Image Assistant o desde las páginas oficiales (SFF, MT, CMT). Incluye enlaces y comandos útiles.</p>
+          <div class="toc" style="margin-top:10px">
+            <a href="#requisitos">Requisitos</a>
+            <a href="#descargas">Descargas</a>
+            <a href="#usb">Crear USB</a>
+            <a href="#instalacion">Instalación</a>
+            <a href="#drivers">Drivers</a>
+            <a href="#bios">BIOS/UEFI</a>
+            <a href="#activacion">Activación</a>
+            <a href="#solucion">Solución de problemas</a>
+          </div>
+        </div>
+        <div class="card pad">
+          <strong>Checklist rápido</strong>
+          <ul>
+            <li>HP Elite 8300 (SFF/MT/CMT) con UEFI.</li>
+            <li>USB 8–16 GB (vacío).</li>
+            <li>ISO oficial Windows 10 (64‑bit recomendado).</li>
+            <li>Conocer teclas HP: <kbd>ESC</kbd> (Startup Menu), <kbd>F9</kbd> (Boot Menu), <kbd>F10</kbd> (BIOS).</li>
+            <li>Copia de seguridad de datos.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="requisitos">
+      <h2>1) Requisitos y recomendaciones</h2>
+      <div class="grid-3">
+        <div class="card pad">
+          <strong>Firmware</strong>
+          <ul>
+            <li>Modo UEFI activo (recomendado).</li>
+            <li>Estilo de partición: <strong>GPT</strong>.</li>
+            <li><em>Secure Boot</em>: puedes desactivarlo si da conflicto con ISOs antiguas.</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Hardware</strong>
+          <ul>
+            <li>RAM ≥ 4 GB (ideal 8+ GB).</li>
+            <li>Almacenamiento SSD recomendado.</li>
+            <li>Conexión a Internet para drivers/activación.</li>
+          </ul>
+        </div>
+        <div class="card pad">
+          <strong>Comprobar desde Windows</strong>
+          <ul>
+            <li><kbd>Win</kbd>+<kbd>R</kbd> → <code>msinfo32</code> → «Modo de BIOS» = UEFI.</li>
+            <li>Ver clave OEM (si existe): <code class="copy">wmic path softwarelicensingservice get OA3xOriginalProductKey</code></li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">El HP Elite 8300 funciona perfecto con instalación UEFI + GPT. MBR/Legacy solo si lo necesitas por compatibilidad.</p>
+    </section>
+
+    <section id="descargas">
+      <h2>2) Descargas oficiales</h2>
+      <div class="grid-2">
+        <div class="card pad">
+          <strong>Windows 10</strong>
+          <div class="btns">
+            <a class="btn" href="https://www.microsoft.com/es-es/software-download/windows10" target="_blank" rel="noopener">Media Creation Tool</a>
+            <a class="btn" href="https://www.microsoft.com/es-es/software-download/windows10iso" target="_blank" rel="noopener">Descarga ISO directa</a>
+          </div>
+          <p style="margin-top:8px">La edición <em>Pro</em> se selecciona durante la instalación/activación.</p>
+        </div>
+        <div class="card pad">
+          <strong>Herramientas</strong>
+          <div class="btns">
+            <a class="btn" href="https://rufus.ie/" target="_blank" rel="noopener">Rufus</a>
+            <a class="btn" href="https://ftp.ext.hp.com/pub/caps-softpaq/cmit/HPIA.html" target="_blank" rel="noopener">HP Image Assistant</a>
+            <a class="btn" href="https://www.intel.com/download/15084/intel-ethernet-adapter-complete-driver-pack.html" target="_blank" rel="noopener">Intel LAN Pack (82579LM)</a>
+            <a class="btn" href="https://www.intel.com/content/www/us/en/support/intel-driver-support-assistant.html" target="_blank" rel="noopener">Intel Driver & Support Assistant</a>
+          </div>
+        </div>
+      </div>
+      <div class="card pad" style="margin-top:12px">
+        <strong>Drivers HP por chasis</strong>
+        <div class="btns">
+          <a class="btn" href="https://support.hp.com/us-en/drivers/hp-compaq-elite-8300-small-form-factor-pc/5232852" target="_blank" rel="noopener">Elite 8300 SFF</a>
+          <a class="btn" href="https://support.hp.com/us-en/drivers/hp-compaq-elite-8300-microtower-pc/5232859" target="_blank" rel="noopener">Elite 8300 MT</a>
+          <a class="btn" href="https://support.hp.com/us-en/drivers/hp-compaq-elite-8300-convertible-minitower-pc/5232845" target="_blank" rel="noopener">Elite 8300 CMT</a>
+        </div>
+        <p class="note">Si no sabes tu chasis, usa HP Image Assistant: detecta el modelo y descarga los SoftPaq correctos.</p>
+      </div>
+    </section>
+
+    <section id="usb">
+      <h2>3) Crear USB de instalación con Rufus (HP 8300)</h2>
+      <details open>
+        <summary>Configuración recomendada (UEFI + GPT)</summary>
+        <ol>
+          <li><strong>Dispositivo</strong>: tu USB (8–16 GB).</li>
+          <li><strong>Seleccionar</strong>: elige la ISO de Windows 10.</li>
+          <li><strong>Esquema de partición</strong>: <strong>GPT</strong>.</li>
+          <li><strong>Sistema de destino</strong>: <strong>UEFI (no CSM)</strong>.</li>
+          <li><strong>Sistema de archivos</strong>: NTFS (Rufus lo usará si <code>install.wim</code> &gt; 4 GB).</li>
+          <li>Pulsa <strong>Empezar</strong> y acepta el formateo.</li>
+        </ol>
+        <p class="note ok">Esto coincide con el firmware UEFI del 8300 y evita problemas de arranque.</p>
+      </details>
+      <details>
+        <summary>Si Rufus avisa “gestor de arranque UEFI revocado”</summary>
+        <ul>
+          <li>Usa ISO oficial reciente (enlaces arriba) o crea el USB con Media Creation Tool.</li>
+          <li>Como alternativa, desactiva temporalmente <em>Secure Boot</em> en BIOS para instalar.</li>
+        </ul>
+      </details>
+    </section>
+
+    <section id="instalacion">
+      <h2>4) Instalación de Windows 10</h2>
+      <ol>
+        <li>Conecta el USB y enciende el equipo. Pulsa <kbd>ESC</kbd> → <kbd>F9</kbd> para el <em>Boot Menu</em> y elige el USB (UEFI).</li>
+        <li>Instalador: idioma → <strong>Instalar ahora</strong> → omite o introduce clave → selecciona <strong>Windows 10 Pro</strong>.</li>
+        <li><strong>Personalizada</strong> → selecciona tu SSD → elimina particiones (si quieres instalación limpia) hasta dejar <em>Espacio sin asignar</em> → <strong>Siguiente</strong>.</li>
+        <li>Deja que copie archivos y se reinicie. No inicies otra vez desde el USB.</li>
+        <li>Completa configuración inicial (red, cuenta, privacidad).</li>
+      </ol>
+      <p class="note">Si el disco no aparece, pon <strong>AHCI</strong> en BIOS y actualiza BIOS si es muy antigua.</p>
+    </section>
+
+    <section id="drivers">
+      <h2>5) Instalar drivers (orden recomendado)</h2>
+      <div class="grid-2">
+        <div class="card pad">
+          <strong>Automático con HP Image Assistant</strong>
+          <ol>
+            <li>Descarga HPIA y ejecútalo como administrador.</li>
+            <li>Selecciona <em>Analyze</em> → aplica SoftPaqs propuestos (Chipset, MEI, Audio, LAN, BIOS si procede).</li>
+            <li>Reinicia cuando lo solicite.</li>
+          </ol>
+        </div>
+        <div class="card pad">
+          <strong>Manual desde HP/Intel</strong>
+          <ol>
+            <li><em>Windows Update</em> primero (suele instalar gráficos/sonido/red básicos).</li>
+            <li><strong>Chipset + Intel MEI</strong> (desde tu página HP SFF/MT/CMT).</li>
+            <li><strong>LAN Intel 82579LM</strong>: si HP no ofrece versión reciente, usa <em>Intel Ethernet Adapter Driver Pack</em>.</li>
+            <li><strong>Audio Realtek HD</strong>: desde la página HP de tu modelo.</li>
+            <li><strong>Gráficos</strong>: Intel HD 2500/4000; puedes usar <em>Intel Driver & Support Assistant</em>.</li>
+            <li><strong>Intel RST</strong> (solo si usas RAID/RST).</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section id="bios">
+      <h2>6) BIOS/UEFI en HP Elite 8300</h2>
+      <ul>
+        <li>Entrar a BIOS: <kbd>ESC</kbd> → <kbd>F10</kbd>.</li>
+        <li>Orden de arranque: pon <strong>Windows Boot Manager</strong> primero.</li>
+        <li>Si vas a actualizar BIOS, hazlo desde BIOS (no desde Windows) y con energía estable.</li>
+        <li>Para ver el menú de arranque: <kbd>ESC</kbd> → <kbd>F9</kbd>.</li>
+      </ul>
+      <p class="note warn">Una actualización de BIOS mal realizada puede dejar el equipo inoperativo. Solo actualiza si lo necesitas (compatibilidad/seguridad) y siguiendo el procedimiento de HP.</p>
+    </section>
+
+    <section id="activacion">
+      <h2>7) Activación y licencia</h2>
+      <ul>
+        <li>Si reinstalas en el mismo HP y la edición coincide, Windows suele activarse solo por <strong>licencia digital</strong>.</li>
+        <li>Para ver tu clave OEM (si existe):
+          <div class="btns">
+            <button class="btn copy-btn" data-copy="wmic path softwarelicensingservice get OA3xOriginalProductKey">Copiar comando WMIC</button>
+          </div>
+        </li>
+        <li>Activa en <em>Configuración &gt; Actualización y seguridad &gt; Activación</em>.</li>
+      </ul>
+    </section>
+
+    <section id="solucion">
+      <h2>8) Solución de problemas</h2>
+      <details>
+        <summary>No aparece el USB en el Boot Menu</summary>
+        <ul>
+          <li>Recrea USB en Rufus como <strong>GPT + UEFI (no CSM)</strong>.</li>
+          <li>Prueba otro puerto USB (2.0 en equipos antiguos).</li>
+          <li>Desactiva <em>Fast Boot</em> temporalmente.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Mensaje de seguridad / UEFI revocado</summary>
+        <ul>
+          <li>Usa ISO oficial reciente o Media Creation Tool.</li>
+          <li>Desactiva <em>Secure Boot</em> para instalar y vuelve a activarlo luego (si la ISO es reciente, no hará falta desactivarlo).</li>
+        </ul>
+      </details>
+      <details>
+        <summary>El sistema no arranca tras copiar archivos</summary>
+        <ul>
+          <li>Quita el USB o baja su prioridad tras el primer reinicio.</li>
+        </ul>
+      </details>
+      <details>
+        <summary>Reconstruir gestor de arranque (avanzado)</summary>
+        <pre><code>bootrec /fixmbr
+bootrec /fixboot
+bootrec /scanos
+bootrec /rebuildbcd
+
+rem Reinyectar cargador UEFI (ajusta letras):
+bcdboot C:\Windows /l es-es /s S: /f UEFI</code></pre>
+      </details>
+    </section>
+
+    <footer>
+      Guía práctica para HP Elite 8300. Puedes imprimir o guardar en PDF con el botón superior.
+    </footer>
+  </main>
+
+  <script>
+    // Imprimir / PDF
+    document.getElementById('btn-imprimir').addEventListener('click', () => window.print());
+    // Expandir/colapsar <details>
+    const btn = document.getElementById('btn-colapsar'); let expanded = false;
+    btn.addEventListener('click', () => { document.querySelectorAll('details').forEach(d => d.open = !expanded); expanded = !expanded; btn.textContent = expanded ? 'Colapsar todo' : 'Expandir todo'; });
+    // Copiar comandos
+    document.querySelectorAll('.copy-btn').forEach(b => b.addEventListener('click', () => { navigator.clipboard.writeText(b.dataset.copy); b.textContent = 'Copiado ✔'; setTimeout(()=> b.textContent='Copiar comando WMIC',1200); }));
+    // Copiar al hacer click en code con clase .copy
+    document.querySelectorAll('code.copy').forEach(el => el.addEventListener('click', () => { navigator.clipboard.writeText(el.textContent.trim()); el.style.outline='2px solid #38d39f'; setTimeout(()=> el.style.outline='none', 600); }));
+  </script>
+</body>
+</html>
