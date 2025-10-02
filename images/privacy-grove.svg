@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 520" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="privacySky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#d1f1ff" />
+      <stop offset="100%" stop-color="#f1f8e9" />
+    </linearGradient>
+    <linearGradient id="privacyField" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c8e6c9" />
+      <stop offset="100%" stop-color="#81c784" />
+    </linearGradient>
+    <linearGradient id="privacyPath" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffe0b2" />
+      <stop offset="100%" stop-color="#ffcc80" />
+    </linearGradient>
+    <linearGradient id="privacyTree" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#66bb6a" />
+      <stop offset="100%" stop-color="#2e7d32" />
+    </linearGradient>
+    <linearGradient id="privacyTrunk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8d6e63" />
+      <stop offset="100%" stop-color="#5d4037" />
+    </linearGradient>
+    <radialGradient id="privacyOrange" cx="0.3" cy="0.3" r="0.8">
+      <stop offset="0%" stop-color="#fff3e0" />
+      <stop offset="60%" stop-color="#ffb74d" />
+      <stop offset="100%" stop-color="#f57c00" />
+    </radialGradient>
+  </defs>
+  <rect width="780" height="520" fill="url(#privacySky)" />
+  <path d="M0 320 C 180 260 320 280 480 330 C 600 366 700 360 780 330 L780 520 L0 520 Z" fill="url(#privacyField)" />
+  <path d="M340 520 C 320 400 380 320 440 260 C 480 220 520 200 580 170" fill="none" stroke="url(#privacyPath)" stroke-width="60" stroke-linecap="round" stroke-linejoin="round" opacity="0.8" />
+  <g transform="translate(120,220)">
+    <g>
+      <rect x="-18" y="130" width="36" height="140" fill="url(#privacyTrunk)" />
+      <circle cx="0" cy="90" r="120" fill="url(#privacyTree)" />
+    </g>
+    <g transform="translate(200,-40)">
+      <rect x="-18" y="180" width="36" height="160" fill="url(#privacyTrunk)" />
+      <circle cx="0" cy="130" r="150" fill="url(#privacyTree)" />
+    </g>
+    <g transform="translate(420,-10)">
+      <rect x="-18" y="150" width="36" height="150" fill="url(#privacyTrunk)" />
+      <circle cx="0" cy="120" r="135" fill="url(#privacyTree)" />
+    </g>
+  </g>
+  <g transform="translate(120,340)">
+    <g opacity="0.9">
+      <circle cx="0" cy="0" r="28" fill="url(#privacyOrange)" />
+      <circle cx="-32" cy="-16" r="26" fill="url(#privacyOrange)" />
+      <circle cx="28" cy="-20" r="30" fill="url(#privacyOrange)" />
+      <circle cx="12" cy="26" r="24" fill="url(#privacyOrange)" />
+    </g>
+    <g transform="translate(210,-10)" opacity="0.85">
+      <circle cx="0" cy="0" r="30" fill="url(#privacyOrange)" />
+      <circle cx="-36" cy="-18" r="26" fill="url(#privacyOrange)" />
+      <circle cx="30" cy="-14" r="28" fill="url(#privacyOrange)" />
+      <circle cx="10" cy="26" r="26" fill="url(#privacyOrange)" />
+    </g>
+    <g transform="translate(420,10)" opacity="0.8">
+      <circle cx="0" cy="0" r="32" fill="url(#privacyOrange)" />
+      <circle cx="-34" cy="-16" r="28" fill="url(#privacyOrange)" />
+      <circle cx="30" cy="-10" r="30" fill="url(#privacyOrange)" />
+      <circle cx="12" cy="28" r="26" fill="url(#privacyOrange)" />
+    </g>
+  </g>
+  <g transform="translate(520,150)" opacity="0.4">
+    <circle cx="0" cy="0" r="120" fill="#ffffff" />
+  </g>
+</svg>
