@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8fd3f4" />
+      <stop offset="100%" stop-color="#ffffff" />
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9ccc65" />
+      <stop offset="100%" stop-color="#558b2f" />
+    </linearGradient>
+    <linearGradient id="tree" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4caf50" />
+      <stop offset="100%" stop-color="#2e7d32" />
+    </linearGradient>
+    <linearGradient id="trunk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8d6e63" />
+      <stop offset="100%" stop-color="#5d4037" />
+    </linearGradient>
+    <radialGradient id="orange" cx="0.3" cy="0.3" r="0.9">
+      <stop offset="0%" stop-color="#ffe082" />
+      <stop offset="55%" stop-color="#ffb300" />
+      <stop offset="100%" stop-color="#ef6c00" />
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#sky)" />
+  <g transform="translate(0,420)">
+    <rect width="1600" height="480" fill="url(#field)" />
+    <path d="M0 300 C200 240 400 240 600 300 S1000 360 1200 300 S1600 240 1600 240 L1600 480 L0 480 Z" fill="#7cb342" opacity="0.7" />
+    <path d="M0 380 C200 320 400 320 600 380 S1000 440 1200 380 S1600 320 1600 320 L1600 480 L0 480 Z" fill="#558b2f" opacity="0.5" />
+  </g>
+  <g transform="translate(120,420)">
+    <g transform="translate(0,0)">
+      <rect x="-10" y="200" width="20" height="120" fill="url(#trunk)" />
+      <circle cx="0" cy="180" r="100" fill="url(#tree)" />
+    </g>
+    <g transform="translate(220,40)">
+      <rect x="-10" y="220" width="20" height="120" fill="url(#trunk)" />
+      <circle cx="0" cy="200" r="110" fill="url(#tree)" />
+    </g>
+    <g transform="translate(480,-10)">
+      <rect x="-12" y="240" width="24" height="140" fill="url(#trunk)" />
+      <circle cx="0" cy="210" r="130" fill="url(#tree)" />
+    </g>
+    <g transform="translate(780,30)">
+      <rect x="-10" y="220" width="20" height="130" fill="url(#trunk)" />
+      <circle cx="0" cy="200" r="115" fill="url(#tree)" />
+    </g>
+    <g transform="translate(1040,-20)">
+      <rect x="-10" y="240" width="20" height="140" fill="url(#trunk)" />
+      <circle cx="0" cy="205" r="135" fill="url(#tree)" />
+    </g>
+  </g>
+  <g transform="translate(200,520)" opacity="0.9">
+    <g transform="translate(0,0)">
+      <circle cx="0" cy="0" r="32" fill="url(#orange)" />
+      <circle cx="70" cy="10" r="30" fill="url(#orange)" />
+      <circle cx="140" cy="-5" r="34" fill="url(#orange)" />
+      <circle cx="210" cy="8" r="28" fill="url(#orange)" />
+      <circle cx="280" cy="-2" r="33" fill="url(#orange)" />
+    </g>
+    <g transform="translate(30,80)">
+      <circle cx="0" cy="0" r="32" fill="url(#orange)" />
+      <circle cx="70" cy="-12" r="30" fill="url(#orange)" />
+      <circle cx="140" cy="4" r="34" fill="url(#orange)" />
+      <circle cx="210" cy="-10" r="30" fill="url(#orange)" />
+      <circle cx="280" cy="6" r="33" fill="url(#orange)" />
+    </g>
+    <g transform="translate(60,150)">
+      <circle cx="0" cy="0" r="32" fill="url(#orange)" />
+      <circle cx="70" cy="-12" r="30" fill="url(#orange)" />
+      <circle cx="140" cy="4" r="34" fill="url(#orange)" />
+      <circle cx="210" cy="-10" r="30" fill="url(#orange)" />
+      <circle cx="280" cy="6" r="33" fill="url(#orange)" />
+    </g>
+  </g>
+  <g transform="translate(1020,540)" opacity="0.7">
+    <g transform="translate(0,0)">
+      <circle cx="0" cy="0" r="30" fill="url(#orange)" />
+      <circle cx="60" cy="-4" r="30" fill="url(#orange)" />
+      <circle cx="120" cy="4" r="28" fill="url(#orange)" />
+      <circle cx="180" cy="-6" r="32" fill="url(#orange)" />
+    </g>
+    <g transform="translate(30,70)">
+      <circle cx="0" cy="0" r="30" fill="url(#orange)" />
+      <circle cx="60" cy="-8" r="28" fill="url(#orange)" />
+      <circle cx="120" cy="6" r="30" fill="url(#orange)" />
+      <circle cx="180" cy="-4" r="32" fill="url(#orange)" />
+    </g>
+  </g>
+</svg>

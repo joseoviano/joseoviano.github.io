@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5f9ff" />
+      <stop offset="100%" stop-color="#e0f2f1" />
+    </linearGradient>
+    <linearGradient id="crate" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d7ccc8" />
+      <stop offset="100%" stop-color="#8d6e63" />
+    </linearGradient>
+    <linearGradient id="crateHighlight" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#bcaaa4" />
+      <stop offset="100%" stop-color="#6d4c41" />
+    </linearGradient>
+    <radialGradient id="orangeFruit" cx="0.3" cy="0.3" r="0.8">
+      <stop offset="0%" stop-color="#fff3e0" />
+      <stop offset="60%" stop-color="#ffb74d" />
+      <stop offset="100%" stop-color="#f57c00" />
+    </radialGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#aed581" />
+      <stop offset="100%" stop-color="#388e3c" />
+    </linearGradient>
+  </defs>
+  <rect width="900" height="700" fill="url(#background)" />
+  <g transform="translate(150,140)">
+    <rect x="0" y="260" width="600" height="180" rx="40" ry="40" fill="rgba(0,0,0,0.08)" />
+    <g transform="translate(0,80)">
+      <rect x="30" y="120" width="540" height="200" rx="30" fill="url(#crate)" />
+      <rect x="30" y="120" width="540" height="60" fill="url(#crateHighlight)" opacity="0.8" />
+      <rect x="30" y="200" width="540" height="60" fill="url(#crateHighlight)" opacity="0.85" />
+      <rect x="30" y="280" width="540" height="40" fill="url(#crateHighlight)" opacity="0.9" />
+      <g stroke="#6d4c41" stroke-width="8" opacity="0.6">
+        <line x1="110" y1="120" x2="110" y2="320" />
+        <line x1="190" y1="120" x2="190" y2="320" />
+        <line x1="270" y1="120" x2="270" y2="320" />
+        <line x1="350" y1="120" x2="350" y2="320" />
+        <line x1="430" y1="120" x2="430" y2="320" />
+        <line x1="510" y1="120" x2="510" y2="320" />
+      </g>
+      <rect x="30" y="120" width="540" height="200" rx="30" fill="none" stroke="#5d4037" stroke-width="10" opacity="0.7" />
+    </g>
+    <g transform="translate(120,0)">
+      <g transform="translate(0,160)">
+        <circle cx="0" cy="0" r="90" fill="url(#orangeFruit)" />
+        <ellipse cx="-30" cy="-80" rx="35" ry="14" fill="rgba(255,255,255,0.6)" />
+        <path d="M-20 -90 C 0 -110 30 -110 40 -90" fill="url(#leaf)" />
+      </g>
+      <g transform="translate(140,140)">
+        <circle cx="0" cy="0" r="100" fill="url(#orangeFruit)" />
+        <ellipse cx="-40" cy="-90" rx="38" ry="16" fill="rgba(255,255,255,0.5)" />
+        <path d="M-35 -95 C -10 -130 40 -130 70 -95" fill="url(#leaf)" />
+      </g>
+      <g transform="translate(310,180)">
+        <circle cx="0" cy="0" r="92" fill="url(#orangeFruit)" />
+        <ellipse cx="-32" cy="-82" rx="34" ry="14" fill="rgba(255,255,255,0.45)" />
+        <path d="M-20 -92 C 10 -122 40 -122 60 -96" fill="url(#leaf)" />
+      </g>
+      <g transform="translate(220,60)">
+        <circle cx="0" cy="0" r="82" fill="url(#orangeFruit)" />
+        <ellipse cx="-28" cy="-70" rx="30" ry="12" fill="rgba(255,255,255,0.4)" />
+        <path d="M-26 -78 C -6 -102 24 -104 48 -84" fill="url(#leaf)" />
+      </g>
+      <g transform="translate(420,120)">
+        <circle cx="0" cy="0" r="85" fill="url(#orangeFruit)" />
+        <ellipse cx="-26" cy="-78" rx="30" ry="12" fill="rgba(255,255,255,0.4)" />
+        <path d="M-22 -86 C -2 -110 30 -110 56 -90" fill="url(#leaf)" />
+      </g>
+    </g>
+  </g>
+</svg>

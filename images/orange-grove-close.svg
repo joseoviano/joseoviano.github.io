@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="groveSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a3d5ff" />
+      <stop offset="100%" stop-color="#e8f5e9" />
+    </linearGradient>
+    <linearGradient id="groveGround" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c5e1a5" />
+      <stop offset="100%" stop-color="#81c784" />
+    </linearGradient>
+    <linearGradient id="treeCanopy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#66bb6a" />
+      <stop offset="100%" stop-color="#2e7d32" />
+    </linearGradient>
+    <linearGradient id="treeTrunk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a1887f" />
+      <stop offset="100%" stop-color="#6d4c41" />
+    </linearGradient>
+    <radialGradient id="groveOrange" cx="0.3" cy="0.3" r="0.8">
+      <stop offset="0%" stop-color="#fff8e1" />
+      <stop offset="60%" stop-color="#ffb74d" />
+      <stop offset="100%" stop-color="#f57c00" />
+    </radialGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#groveSky)" />
+  <path d="M0 360 C 150 300 250 300 400 360 C 550 420 650 420 800 360 L800 600 L0 600 Z" fill="url(#groveGround)" />
+  <g transform="translate(80,260)">
+    <g transform="translate(0,0)">
+      <rect x="-15" y="120" width="30" height="130" fill="url(#treeTrunk)" />
+      <circle cx="0" cy="90" r="110" fill="url(#treeCanopy)" />
+    </g>
+    <g transform="translate(200,-20)">
+      <rect x="-15" y="160" width="30" height="150" fill="url(#treeTrunk)" />
+      <circle cx="0" cy="120" r="130" fill="url(#treeCanopy)" />
+    </g>
+    <g transform="translate(420,10)">
+      <rect x="-15" y="140" width="30" height="140" fill="url(#treeTrunk)" />
+      <circle cx="0" cy="110" r="120" fill="url(#treeCanopy)" />
+    </g>
+    <g transform="translate(600,-30)">
+      <rect x="-15" y="170" width="30" height="150" fill="url(#treeTrunk)" />
+      <circle cx="0" cy="130" r="135" fill="url(#treeCanopy)" />
+    </g>
+  </g>
+  <g transform="translate(120,340)">
+    <g transform="translate(0,0)" opacity="0.92">
+      <circle cx="0" cy="0" r="28" fill="url(#groveOrange)" />
+      <circle cx="30" cy="-18" r="24" fill="url(#groveOrange)" />
+      <circle cx="-30" cy="-12" r="26" fill="url(#groveOrange)" />
+    </g>
+    <g transform="translate(180,-10)" opacity="0.88">
+      <circle cx="0" cy="0" r="30" fill="url(#groveOrange)" />
+      <circle cx="36" cy="-14" r="26" fill="url(#groveOrange)" />
+      <circle cx="-34" cy="-16" r="28" fill="url(#groveOrange)" />
+      <circle cx="10" cy="24" r="26" fill="url(#groveOrange)" />
+    </g>
+    <g transform="translate(360,20)" opacity="0.85">
+      <circle cx="0" cy="0" r="32" fill="url(#groveOrange)" />
+      <circle cx="40" cy="-20" r="28" fill="url(#groveOrange)" />
+      <circle cx="-36" cy="-18" r="28" fill="url(#groveOrange)" />
+      <circle cx="12" cy="26" r="26" fill="url(#groveOrange)" />
+    </g>
+  </g>
+  <g transform="translate(80,450)" opacity="0.6">
+    <ellipse cx="120" cy="0" rx="100" ry="20" fill="#9ccc65" />
+    <ellipse cx="340" cy="10" rx="110" ry="24" fill="#81c784" />
+    <ellipse cx="560" cy="0" rx="90" ry="20" fill="#66bb6a" />
+  </g>
+</svg>
